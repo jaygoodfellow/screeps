@@ -10,7 +10,7 @@ module.exports = {
         if(creep.memory.harvesting) {
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    if((structure.structureType == 'extension' || structure.structureType == 'spawn') && structure.energy < structure.energyCapacity) {
+                    if((structure.structureType == STRUCTURE_EXTENSION || structure.structureType == STRUCTURE_STORAGE) && structure.energy < structure.energyCapacity) {
                         return true
                     }
                     return false
@@ -22,8 +22,6 @@ module.exports = {
                 if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target)
                 }
-            } else {
-                //creep.memory.role = 'Upgrader'
             }
         }
         else {
