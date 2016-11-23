@@ -16,6 +16,8 @@ module.exports = {
                     return false
                 }
             })
+            let tower = Game.getObjectById('58351d72eb22d4ca24273a5d')
+            if(tower.energy/tower.energyCapacity < 0.8 && creep.name == 'Spawn_15490876') target = tower
             if(target) {
                 if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target)

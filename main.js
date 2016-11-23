@@ -32,6 +32,17 @@ module.exports.loop = function () {
         }
     }
     actionCreate.run(workForce)
-
-
+    //new tower fixing code
+    let tower = Game.getObjectById('58351d72eb22d4ca24273a5d')
+    let target = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+        filter: function (structure) {
+            if(structure.structureType == 'road' && structure.hits/structure.hitsMax < 0.20) {
+                return true
+            }
+            return false
+        }
+    })
+    if(target){
+      tower.repair(target)
+    }
 }
