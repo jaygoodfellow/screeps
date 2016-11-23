@@ -8,11 +8,11 @@ const actionCreate = require('action.Create')
 const workerOverride = false
 
 module.exports.loop = function () {
-    let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0}
-    for(var name in Game.creeps) {
+    let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Miner': 0}
+    for(let name in Game.creeps) {
         let creep = Game.creeps[name]
         workForce[creep.memory.role]++
-        
+
         if(Game.time % 3 == 0) creep.say(`${creep.memory.role[0]}: ${creep.ticksToLive}` )
 
 				if(workerOverride) {
