@@ -12,7 +12,7 @@ module.exports.loop = function () {
     for(var name in Game.creeps) {
         let creep = Game.creeps[name]
         workForce[creep.memory.role]++
-
+        
         if(Game.time % 3 == 0) creep.say(`${creep.memory.role[0]}: ${creep.ticksToLive}` )
 
 				if(workerOverride) {

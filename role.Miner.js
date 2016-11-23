@@ -1,12 +1,11 @@
 
 module.exports = {
     run: function(creep){
-      let target = creep.pos.findClosestByPath(FIND_MINERALS)
-
-      if(target) {
-          if(creep.harvest(target) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(target)
-          }
+      let target = creep.pos.getObjectById('57efa00c195b160f02c75110')
+      if(creep.pos.x == 9 && creep.pos.y == 26) {
+        creep.harvest(target)
+      } else {
+        creep.moveTo(9,26)
       }
     }
 };
