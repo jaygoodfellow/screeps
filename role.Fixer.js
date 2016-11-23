@@ -1,5 +1,22 @@
 const actionHarvest = require('action.Harvest')
 module.exports = {
+    harvest: function(creep) {
+      if(creep.memory.harvesting && creep.carry.energy == 0) {
+          creep.memory.harvesting = false
+      }
+      if(!creep.memory.harvesting && creep.carry.energy == creep.carryCapacity) {
+          creep.memory.harvesting = true
+      }
+      if(creep.memory.harvesting) {
+          let target = Game.getObjectById('58351d72eb22d4ca24273a5d')
+          if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(target)
+          }
+      }
+      else {
+          actionHarvest.run(creep)
+      }
+    },
     run:  function(creep) {
         if(creep.memory.fixing && creep.carry.energy == 0) {
             creep.memory.fixing = false
@@ -12,9 +29,8 @@ module.exports = {
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: function (structure) {
                     if(
-                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 100000) || 
-                      (structure.structureType == STRUCTURE_WALL && structure.hits < 2000) ||
-                      (structure.structureType == STRUCTURE_ROAD && structure.hits < 4000)
+                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 50000) ||
+                      (structure.structureType == STRUCTURE_WALL && structure.hits < 20000)
                     ) {
                         return true
                     }

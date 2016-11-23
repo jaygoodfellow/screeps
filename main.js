@@ -9,6 +9,8 @@ const workerOverride = false
 
 module.exports.loop = function () {
     let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Miner': 0}
+    let controller = Game.getObjectById('57ef9d5d86f108ae6e60da46')
+    //console.log(controller.progress)
     for(let name in Game.creeps) {
         let creep = Game.creeps[name]
         workForce[creep.memory.role]++
@@ -23,7 +25,7 @@ module.exports.loop = function () {
             } else if (creep.memory.role == 'Builder') {
               roleBuilder.run(creep)
             } else if (creep.memory.role == 'Fixer') {
-              roleFixer.run(creep)
+              roleFixer.harvest(creep)
             } else if (creep.memory.role == 'Harvester') {
               roleHarvester.run(creep)
             } else if (creep.memory.role == 'Miner') {
@@ -34,15 +36,20 @@ module.exports.loop = function () {
     actionCreate.run(workForce)
     //new tower fixing code
     let tower = Game.getObjectById('58351d72eb22d4ca24273a5d')
-    let target = tower.pos.findClosestByRange(FIND_STRUCTURES, {
+    let targetRepair = tower.pos.findClosestByRange(FIND_STRUCTURES, {
         filter: function (structure) {
-            if(structure.structureType == 'road' && structure.hits/structure.hitsMax < 0.20) {
+            if(
+               (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.25) ||
+               (structure.structureType == STRUCTURE_CONTAINER && structure.hits/structure.hitsMax < 0.50) ||
+               (structure.structureType == STRUCTURE_RAMPART && structure.hits/structure.hitsMax < 0.002 && tower.energy > 100) ||
+               (structure.structureType == STRUCTURE_WALL && structure.hits/structure.hitsMax < 0.00002 && tower.energy > 100)
+            ) {
                 return true
             }
             return false
         }
     })
-    if(target){
-      tower.repair(target)
+    if(targetRepair){
+      tower.repair(targetRepair)
     }
 }
