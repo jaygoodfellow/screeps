@@ -10,7 +10,7 @@ module.exports = {
         if(creep.memory.building) {
             let target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
 
-            let workOrders = ['58354ebe562492df04a7300d']
+            let workOrders = ['5835685ac8012784246ab217', '58356909c8012784246ab2cc', '58356909c8012784246ab2ce', '583568bbc8012784246ab283']
 
             for(let order of workOrders) {
               let workOrder = Game.getObjectById(order)
