@@ -2,6 +2,7 @@ const roleUpgrader = require('role.Upgrader')
 const roleBuilder = require('role.Builder')
 const roleFixer = require('role.Fixer')
 const roleHarvester = require('role.Harvester')
+const roleSoldier = require('role.Soldier')
 const roleMiner = require('role.Miner')
 const roleTower = require('role.Tower')
 const actionCreate = require('action.Create')
@@ -9,7 +10,7 @@ const actionCreate = require('action.Create')
 const workerOverride = false
 
 module.exports.loop = function () {
-    let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Miner': 0}
+    let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Miner': 0, 'Soldier': 0, 'Demolition': 0}
     for(let name in Game.creeps) {
         let creep = Game.creeps[name]
         workForce[creep.memory.role]++
@@ -24,11 +25,27 @@ module.exports.loop = function () {
             } else if (creep.memory.role == 'Builder') {
               roleBuilder.run(creep)
             } else if (creep.memory.role == 'Fixer') {
-              roleFixer.harvest(creep)
+              roleFixer.run(creep)
             } else if (creep.memory.role == 'Harvester') {
               roleHarvester.run(creep)
             } else if (creep.memory.role == 'Miner') {
               roleMiner.run(creep)
+            } else if (creep.memory.role == 'Soldier') {
+              roleSoldier.run(creep)
+            } else if (creep.memory.role == 'Demolition') {
+              var dest = 'W27N68'
+              if(creep.room.name != dest){
+                 creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(dest)))
+              } else {
+                let target = Game.getObjectById('57ef9d5d86f108ae6e60da40')
+
+                if(target) {
+                  if(creep.attackController(target) == ERR_NOT_IN_RANGE){
+                    creep.moveTo(target)
+                  }
+                  console.log(creep.attackController(target))
+                }
+              }
             }
         }
     }
