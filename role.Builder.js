@@ -10,7 +10,7 @@ module.exports = {
         if(creep.memory.building) {
             let target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
 
-            let workOrders = ['58363c9484afc9937e20563c']
+            let workOrders = []
 
             for(let order of workOrders) {
               let workOrder = Game.getObjectById(order)
@@ -24,12 +24,16 @@ module.exports = {
                 if(creep.build(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target)
                 }
-            } else {
-              creep.memory.role = 'Upgrader'
             }
         }
         else {
           actionHarvest.run(creep)
+          // var dest = 'W27N67'
+          //  if(creep.room.name != dest){
+          //      creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(dest)))
+          //  } else {
+          //   actionHarvest.run(creep)
+          //  }
         }
     }
 };

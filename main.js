@@ -32,20 +32,6 @@ module.exports.loop = function () {
               roleMiner.run(creep)
             } else if (creep.memory.role == 'Soldier') {
               roleSoldier.run(creep)
-            } else if (creep.memory.role == 'Demolition') {
-              var dest = 'W27N68'
-              if(creep.room.name != dest){
-                 creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(dest)))
-              } else {
-                let target = Game.getObjectById('57ef9d5d86f108ae6e60da40')
-
-                if(target) {
-                  if(creep.attackController(target) == ERR_NOT_IN_RANGE){
-                    creep.moveTo(target)
-                  }
-                  console.log(creep.attackController(target))
-                }
-              }
             }
         }
     }

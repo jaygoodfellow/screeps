@@ -10,16 +10,33 @@ module.exports = {
         if(creep.memory.harvesting) {
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    if((structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity) || (structure.structureType == STRUCTURE_STORAGE) ) {
+                    if((structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)) {
                         return true
                     }
                     return false
                 }
             })
-
-            let tower = Game.getObjectById('58351d72eb22d4ca24273a5d')
+            if(!target) {
+              target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                  filter: function (structure) {
+                      if( (structure.structureType == STRUCTURE_TOWER && structure.energy/structure.energyCapacity < 1) ) {
+                          return true
+                      }
+                      return false
+                  }
+              })
+            }
+            if(!target) {
+              target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+                  filter: function (structure) {
+                      if( (structure.structureType == STRUCTURE_STORAGE)  ) {
+                          return true
+                      }
+                      return false
+                  }
+              })
+            }
             if(target) {
-
                 if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target)
                 }

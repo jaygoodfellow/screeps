@@ -14,7 +14,7 @@ module.exports = {
              creep.moveTo(target)
            }
          } else {
-           creep.moveTo(36,6)
+           creep.moveTo(20,14)
           //  target = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES)
           //  if(creep.attack(target) == ERR_NOT_IN_RANGE){
           //    creep.moveTo(target)

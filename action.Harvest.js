@@ -9,7 +9,8 @@ module.exports = {
         } else {
           let source = creep.pos.findClosestByRange(FIND_SOURCES)
           if(creep.memory.energySource) {
-            source = Game.getObjectById(creep.memory.energySource)
+            let desirableSource = Game.getObjectById(creep.memory.energySource)
+            if(desirableSource) source = desirableSource
           }
           if(source.structureType) {
             if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
