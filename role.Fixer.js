@@ -28,12 +28,13 @@ module.exports = {
         if(creep.memory.fixing) {
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    if(
-                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 125000) ||
-                      (structure.structureType == STRUCTURE_WALL && structure.hits < 125000)
-                    ) {
-                        return true
-                    }
+                    // if(
+                    //   (structure.structureType == STRUCTURE_RAMPART && structure.hits < 100000) ||
+                    //   (structure.structureType == STRUCTURE_WALL && structure.hits < 100000) ||
+                    //   (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.5)
+                    // ) {
+                    //     return true
+                    // }
                     return false
                 }
             })
@@ -49,7 +50,11 @@ module.exports = {
             }
         }
         else {
-            actionHarvest.run(creep)
+          if(creep.room.name != creep.memory.room){
+              creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.room)))
+          } else {
+           actionHarvest.run(creep)
+          }
         }
     }
 }

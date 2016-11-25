@@ -27,13 +27,11 @@ module.exports = {
             }
         }
         else {
-          actionHarvest.run(creep)
-          // var dest = 'W27N67'
-          //  if(creep.room.name != dest){
-          //      creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(dest)))
-          //  } else {
-          //   actionHarvest.run(creep)
-          //  }
+           if(creep.room.name != creep.memory.room){
+               creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.room)))
+           } else {
+            actionHarvest.run(creep)
+           }
         }
     }
 };

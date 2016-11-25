@@ -12,6 +12,7 @@ module.exports = {
             let desirableSource = Game.getObjectById(creep.memory.energySource)
             if(desirableSource) source = desirableSource
           }
+
           if(source.structureType) {
             if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source)
