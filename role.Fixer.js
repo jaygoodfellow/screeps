@@ -29,8 +29,8 @@ module.exports = {
             let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: function (structure) {
                     if(
-                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 100000) ||
-                      (structure.structureType == STRUCTURE_WALL && structure.hits < 100000)
+                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 125000) ||
+                      (structure.structureType == STRUCTURE_WALL && structure.hits < 125000)
                     ) {
                         return true
                     }
@@ -42,7 +42,10 @@ module.exports = {
                     creep.moveTo(target)
                 }
             } else {
-                creep.memory.role = 'Upgrader'
+                let storage = Game.getObjectById('58351d72eb22d4ca24273a5d')
+                if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    creep.moveTo(storage)
+                }
             }
         }
         else {

@@ -19,7 +19,7 @@ module.exports = {
             if(!target) {
               target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                   filter: function (structure) {
-                      if( (structure.structureType == STRUCTURE_TOWER && structure.energy/structure.energyCapacity < 1) ) {
+                      if( (structure.structureType == STRUCTURE_TOWER && structure.energy/structure.energyCapacity < 0.75) ) {
                           return true
                       }
                       return false
