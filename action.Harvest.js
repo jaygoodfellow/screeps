@@ -8,6 +8,7 @@ module.exports = {
             }
         } else {
           let source = creep.pos.findClosestByRange(FIND_SOURCES)
+        
           if(creep.memory.energySource) {
             let desirableSource = Game.getObjectById(creep.memory.energySource)
             if(desirableSource) source = desirableSource
