@@ -16,7 +16,6 @@ module.exports = {
            target = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
                filter: function (structure) {
                    if(structure.structureType != STRUCTURE_CONTROLLER) {
-                     console.log(structure.structureType)
                        return true
                    }
                    return false

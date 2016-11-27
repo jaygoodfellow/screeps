@@ -9,11 +9,19 @@ const roleUpgrader = require('role.Upgrader')
 const roleLonghauler = require('role.Longhauler')
 const actionCreate = require('action.Create')
 const actionHarvest = require('action.Harvest')
-
+const configRooms = require('config.Rooms')
 
 module.exports.loop = function () {
   let homeRoom = 'W27N67'
+  for(let r in configRooms) {
+    let room = Game.rooms[r]
+    if(room) {
+      _.each(configRooms[r], role => {
+        
+      })
 
+    }
+  }
   let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0}
   for(let name in Game.creeps) {
       let creep = Game.creeps[name]

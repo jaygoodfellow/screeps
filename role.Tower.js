@@ -13,8 +13,8 @@ module.exports = {
                     if(
                        (item.structureType == STRUCTURE_ROAD && item.hits/item.hitsMax < 0.5) ||
                        (item.structureType == STRUCTURE_CONTAINER && item.hits/item.hitsMax < 0.25) ||
-                       (item.structureType == STRUCTURE_RAMPART && item.hits/item.hitsMax < 0.0004) ||
-                       (item.structureType == STRUCTURE_WALL && item.hits/item.hitsMax < 0.00001)
+                       (item.structureType == STRUCTURE_RAMPART && item.hits/item.hitsMax < 0.0005) ||
+                       (item.structureType == STRUCTURE_WALL && item.hits/item.hitsMax < 0.00005)
 
                     ) {
                         return true
