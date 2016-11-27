@@ -1,14 +1,15 @@
 const actionHarvest = require('action.Harvest')
 module.exports = {
     run:  function(creep) {
+
         if(creep.memory.harvesting && creep.carry.energy == 0) {
             creep.memory.harvesting = false
         }
-        if(!creep.memory.harvesting && creep.carry.energy == creep.carryCapacity) {
+        if(!creep.memory.harvesting && _.sum(creep.carry) == creep.carryCapacity) {
             creep.memory.harvesting = true
         }
         if(creep.memory.harvesting) {
-            let target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
                     if((structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)) {
                         return true
@@ -17,7 +18,7 @@ module.exports = {
                 }
             })
             if(!target) {
-              target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+              target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                   filter: function (structure) {
                       if( (structure.structureType == STRUCTURE_TOWER && structure.energy/structure.energyCapacity < 0.75) ) {
                           return true
@@ -27,7 +28,7 @@ module.exports = {
               })
             }
             if(!target) {
-              target = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+              target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                   filter: function (structure) {
                       if( (structure.structureType == STRUCTURE_STORAGE)  ) {
                           return true

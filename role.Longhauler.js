@@ -10,7 +10,7 @@ module.exports = {
 
         if(creep.memory.lonhauling) {
            if(creep.room.name != 'W27N67'){
-               creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo('W27N67')))
+               creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo('W27N67')))
            } else {
              if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
                  creep.moveTo(creep.room.controller);
@@ -19,7 +19,7 @@ module.exports = {
         }
         else {
            if(creep.room.name != creep.memory.room){
-               creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.room)))
+               creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.room)))
            } else {
             actionHarvest.run(creep)
            }

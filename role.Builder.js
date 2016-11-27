@@ -8,7 +8,7 @@ module.exports = {
             creep.memory.building = true
         }
         if(creep.memory.building) {
-            let target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
+            let target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES)
 
             let workOrders = []
 
@@ -28,7 +28,7 @@ module.exports = {
         }
         else {
            if(creep.room.name != creep.memory.room){
-               creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.room)))
+               creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.room)))
            } else {
             actionHarvest.run(creep)
            }

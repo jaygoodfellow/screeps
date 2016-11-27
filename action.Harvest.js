@@ -1,6 +1,6 @@
 module.exports = {
     run:  function(creep) {
-        let dropped = creep.pos.findInRange(FIND_DROPPED_RESOURCES,6)
+        let dropped = creep.pos.findInRange(FIND_DROPPED_ENERGY,6)
 
         if(dropped[0]) {
             if(creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE) {
@@ -8,7 +8,7 @@ module.exports = {
             }
         } else {
           let source = creep.pos.findClosestByRange(FIND_SOURCES)
-        
+
           if(creep.memory.energySource) {
             let desirableSource = Game.getObjectById(creep.memory.energySource)
             if(desirableSource) source = desirableSource
