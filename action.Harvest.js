@@ -7,9 +7,9 @@ module.exports = {
                 creep.moveTo(dropped[0])
             }
         } else {
-          let source = creep.pos.findClosestByRange(FIND_MY_STRUCTURES, {
+          let source = creep.pos.findClosestByRange(FIND_STRUCTURES, {
               filter: function (structure) {
-                  if((creep.memory.role == 'Upgrader' && structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 0)) {
+                  if( ((creep.memory.role == 'Upgrader' || creep.memory.role == 'Builder') && structure.structureType == STRUCTURE_CONTAINER && structure.store.energy > 0)) {
                       return true
                   }
                   return false
@@ -19,7 +19,14 @@ module.exports = {
 
           if(creep.memory.energySource) {
             let desirableSource = Game.getObjectById(creep.memory.energySource)
-            if(desirableSource) source = desirableSource
+
+            if(desirableSource) {
+              if(_.sum(desirableSource.store) == 0 || desirableSource.energy == 0) {
+                desirableSource = null
+              } else {
+                source = desirableSource
+              }
+            }
           }
 
           if(source.structureType) {

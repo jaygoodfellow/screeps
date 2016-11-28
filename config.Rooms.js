@@ -1,4 +1,13 @@
 module.exports = {
+  'W27N66' : [
+    {
+      name: 'Longhauler',
+      max: 4,
+      spawn: 'HQ',
+      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
+      energySource: '57ef9d5d86f108ae6e60da48'
+    }
+  ],
   'W27N68' : [
     {
       name: 'Harvester',
@@ -15,14 +24,14 @@ module.exports = {
     },
     {
       name: 'Builder',
-      max: 3,
+      max: 2,
       spawn: 'HQ2',
       parts: [WORK,MOVE,MOVE,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da42'
     },
     {
       name: 'Fixer',
-      max: 0,
+      max: 1,
       spawn: 'HQ2',
       parts: [WORK,MOVE,MOVE,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da42'
@@ -44,8 +53,15 @@ module.exports = {
       energySource: '57ef9d5d86f108ae6e60da44'
     },
     {
+      name: 'Harvester',
+      max: 3,
+      spawn: 'HQ',
+      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
+      energySource: '57ef9d5d86f108ae6e60da45'
+    },
+    {
       name: 'Builder',
-      max: 1,
+      max: 0,
       spawn: 'HQ',
       parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da45'
@@ -55,30 +71,23 @@ module.exports = {
       max: 1,
       spawn: 'HQ',
       parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
-      energySource: '57ef9d5d86f108ae6e60da44'
-    },
-    {
-      name: 'Harvester',
-      max: 3,
-      spawn: 'HQ',
-      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da45'
     },
     {
       name: 'Mover',
-      max: 3,
+      max: 1,
       spawn: 'HQ',
       parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da48'
     },
     {
       name: 'Longhauler',
-      max: 4,
+      max: 0,
       spawn: 'HQ',
       parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da48',
       room:'W27N66'
     }
-  ]
+    ]
 
 }

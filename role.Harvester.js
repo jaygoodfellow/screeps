@@ -50,6 +50,17 @@ module.exports = {
                   }
               })
             }
+            if(!target) {
+              target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                  filter: function (structure) {
+                      if( (structure.structureType == STRUCTURE_SPAWN)  ) {
+                          return true
+                      }
+                      return false
+                  }
+              })
+            }
+
             if(target) {
                 if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target)
