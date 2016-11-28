@@ -17,6 +17,18 @@ module.exports = {
                     return false
                 }
             })
+
+            if(!target) {
+              target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                  filter: function (structure) {
+                      if(structure.structureType == STRUCTURE_CONTAINER && structure.store.energy < structure.storeCapacity) {
+                          return true
+                      }
+                      return false
+                  }
+              })
+            }
+
             if(!target) {
               target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                   filter: function (structure) {
@@ -27,6 +39,7 @@ module.exports = {
                   }
               })
             }
+
             if(!target) {
               target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                   filter: function (structure) {

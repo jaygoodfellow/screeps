@@ -5,7 +5,9 @@ module.exports = {
          creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.room)))
      } else {
        if(creep.room.controller) {
-           if(creep.reserveController(creep.room.controller) == ERR_NOT_IN_RANGE) {
+         let result = creep.claimController(creep.room.controller)
+         console.log(result)
+           if(result == ERR_NOT_IN_RANGE) {
                creep.moveTo(creep.room.controller)
            }
        }

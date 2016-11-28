@@ -9,23 +9,18 @@ const roleUpgrader = require('role.Upgrader')
 const roleLonghauler = require('role.Longhauler')
 const actionCreate = require('action.Create')
 const actionHarvest = require('action.Harvest')
-const configRooms = require('config.Rooms')
+
 
 module.exports.loop = function () {
   let homeRoom = 'W27N67'
-  for(let r in configRooms) {
-    let room = Game.rooms[r]
-    if(room) {
-      _.each(configRooms[r], role => {
-        
-      })
-
-    }
+  let workForce = {
+    'W27N66':  {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
+    'W27N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
+    'W27N68': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
   }
-  let workForce = {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0}
   for(let name in Game.creeps) {
       let creep = Game.creeps[name]
-      workForce[creep.memory.role]++
+      workForce[creep.memory.room][creep.memory.role]++
 
       if(Game.time % 3 == 0) creep.say(`${creep.memory.role[0]}: ${creep.ticksToLive}` )
 
@@ -48,8 +43,10 @@ module.exports.loop = function () {
       }
   }
 
-  if(Game.time % 10 == 0) actionCreate.run(workForce)
+  //if(Game.time % 10 == 0) actionCreate.run(workForce)
+  actionCreate.run(workForce)
   roleTower.run()
+
 
 
 }

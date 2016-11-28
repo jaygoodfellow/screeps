@@ -16,7 +16,7 @@ module.exports = {
                     if(
                       (structure.structureType == STRUCTURE_RAMPART && structure.hits < 25000) ||
                       (structure.structureType == STRUCTURE_WALL && structure.hits < 25000) ||
-                      (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.35)
+                      (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.5)
                     ) {
                         return true
                     }
