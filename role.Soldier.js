@@ -1,19 +1,21 @@
 
 module.exports = {
     run: function(creep){
+
        if(creep.room.name != creep.memory.room){
-           creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.room)))
+           creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo(creep.memory.room)))
+
          }
        else{
-        let target = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
 
-        //let target = Game.getObjectById('58391b03a1cca8352b869ed4')
+        let target = creep.pos.findClosestByPath(FIND_HOSTILE_CREEPS)
+
          if(target) {
            if(creep.attack(target) == ERR_NOT_IN_RANGE){
              creep.moveTo(target)
            }
          } else {
-           target = creep.pos.findClosestByRange(FIND_HOSTILE_STRUCTURES, {
+           target = creep.pos.findClosestByPath(FIND_HOSTILE_STRUCTURES, {
                filter: function (structure) {
                    if(structure.structureType != STRUCTURE_CONTROLLER) {
                        return true

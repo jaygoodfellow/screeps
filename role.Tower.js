@@ -11,10 +11,10 @@ module.exports = {
             let targetRepair = structure.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (item) {
                     if(
-                       (item.structureType == STRUCTURE_ROAD && item.hits/item.hitsMax < 0.6) ||
+                       (item.structureType == STRUCTURE_ROAD && item.hits/item.hitsMax < 0.5) ||
                        (item.structureType == STRUCTURE_CONTAINER && item.hits/item.hitsMax < 0.25) ||
-                       (item.structureType == STRUCTURE_RAMPART && item.hits/item.hitsMax < 0.002) ||
-                       (item.structureType == STRUCTURE_WALL && item.hits/item.hitsMax < 0.0002)
+                       (item.structureType == STRUCTURE_RAMPART && item.hits/item.hitsMax < 0.01) ||
+                       (item.structureType == STRUCTURE_WALL && item.hits/item.hitsMax < 0.001)
 
                     ) {
                         return true
@@ -22,7 +22,8 @@ module.exports = {
                     return false
                 }
             })
-            if(targetRepair && structure.energy/structure.energyCapacity > 0.5){
+  
+            if(targetRepair && structure.energy/structure.energyCapacity > 0.35){
               structure.repair(targetRepair)
             }
 

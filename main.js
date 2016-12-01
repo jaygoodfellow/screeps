@@ -6,18 +6,21 @@ const roleTower = require('role.Tower')
 const roleClaimer = require('role.Claimer')
 const roleMover = require('role.Mover')
 const roleUpgrader = require('role.Upgrader')
+const roleMiner = require('role.Miner')
 const roleLonghauler = require('role.Longhauler')
 const actionCreate = require('action.Create')
 const actionHarvest = require('action.Harvest')
 
 
 module.exports.loop = function () {
-  let homeRoom = 'W27N67'
+  //global.RAMPART_UPKEEP = RAMPART_DECAY_AMOUNT / REPAIR_POWER / RAMPART_DECAY_TIME;
   let workForce = {
-    'W27N66':  {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
-    'W27N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
-    'W27N68': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
+    'W27N66':  {'Miner':0 , 'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
+    'W26N66': {'Miner':0 ,'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
+    'W27N67': {'Miner':0 ,'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
+    'W27N68': {'Miner':0 ,'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Harvester2': 0, 'Soldier': 0, 'Longhauler': 0, 'Claimer': 0, 'Mover': 0},
   }
+
   for(let name in Game.creeps) {
       let creep = Game.creeps[name]
       workForce[creep.memory.room][creep.memory.role]++
@@ -28,9 +31,11 @@ module.exports.loop = function () {
         roleUpgrader.run(creep)
       } else if (creep.memory.role == 'Builder') {
         roleBuilder.run(creep)
+      } else if (creep.memory.role == 'Miner') {
+        roleMiner.run(creep)
       } else if (creep.memory.role == 'Fixer') {
         roleFixer.run(creep)
-      } else if (creep.memory.role == 'Harvester') {
+      } else if (creep.memory.role == 'Harvester' || creep.memory.role == 'Harvester2') {
         roleHarvester.run(creep)
       } else if (creep.memory.role == 'Soldier') {
         roleSoldier.run(creep)

@@ -14,8 +14,9 @@ module.exports = {
             let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
                     if(
-                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 125000) ||
-                      (structure.structureType == STRUCTURE_WALL && structure.hits < 125000) ||
+                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 25000) ||
+                      (structure.structureType == STRUCTURE_WALL && structure.hits < 25000) ||
+                      (structure.structureType == STRUCTURE_CONTAINER && structure.hits < 75000) ||
                       (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.5)
                     ) {
                         return true
