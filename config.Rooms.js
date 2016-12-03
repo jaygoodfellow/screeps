@@ -1,4 +1,4 @@
-const workerParts = [WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY,CARRY]
+const workerParts = [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY]
 module.exports = {
   'W27N68' : [
     {
@@ -7,6 +7,13 @@ module.exports = {
       spawn: 'HQ2',
       parts: workerParts,
       energySource: '57ef9d5d86f108ae6e60da41'
+    },
+    {
+      name: 'Harvester2',
+      max: 2,
+      spawn: 'HQ2',
+      parts: workerParts,
+      energySource: '57ef9d5d86f108ae6e60da42'
     },
     {
       name: 'Mover',
@@ -22,13 +29,7 @@ module.exports = {
       parts: workerParts,
       energySource: '583f8e60d575dda40825619a'
     },
-    {
-      name: 'Harvester2',
-      max: 2,
-      spawn: 'HQ2',
-      parts: workerParts,
-      energySource: '57ef9d5d86f108ae6e60da42'
-    },
+
     {
       name: 'Upgrader',
       max: 3,

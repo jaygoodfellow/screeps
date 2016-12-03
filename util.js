@@ -45,8 +45,8 @@ module.exports = {
     let status = []
     _.each(structures, structure => {
       let s = Game.getObjectById(structure[0])
-      status.push(s.hits/s.hitsMax)
+      if(s) status.push(s.hits/s.hitsMax)
     })
-    return `Min: ${(_.min(status)*100).toFixed(1)}%, Max: ${(_.max(status)*100).toFixed(1)}%, Avg: ${(_.sum(status)/status.length*100).toFixed(1)}%`
+    return `Min: ${(_.min(status)*100).toFixed(2)}%, Max: ${(_.max(status)*100).toFixed(2)}%, Avg: ${(_.sum(status)/status.length*100).toFixed(2)}%`
   }
 }
