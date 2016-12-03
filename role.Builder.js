@@ -10,10 +10,12 @@ module.exports = {
         }
         if(creep.memory.building) {
           if(creep.memory.target) {
-            let target = Game.getObjectById('58400e84b14a695e0d865421')
-
-            if(creep.build(target) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(target)
+            let target = creep.memory.target.id
+            let result = creep.build(target)
+            if(result == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, {reusePath: 10})
+            } else if(result == ERR_INVALID_TARGET) {
+              creep.memory.target = null
             }
           } else {
             let target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES)
@@ -27,15 +29,16 @@ module.exports = {
             }
             if(target) {
                 if(creep.build(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target)
+                    creep.moveTo(target, {reusePath: 10})
                 }
             }
             creep.memory.target = target
           }
         }
         else {
+
            if(creep.room.name != creep.memory.room){
-               creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.room)))
+               creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.room)), {reusePath: 10})
            } else {
 
             actionHarvest.run(creep)

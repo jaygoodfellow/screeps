@@ -6,7 +6,7 @@ module.exports = {
                 dropped = creep.pos.findInRange( FIND_DROPPED_RESOURCES,10)
             } else {
               if(creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(dropped[0])
+                  creep.moveTo(dropped[0],{reusePath: 10})
               }
             }
         } else {

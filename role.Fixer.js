@@ -26,13 +26,13 @@ module.exports = {
             })
             if(target) {
                 if(creep.repair(target) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(target)
+                    creep.moveTo(target, {reusePath: 10})
                 }
             } else {
                 //main storage unit
                 let storage = Game.getObjectById('5835d51f22c10df7453a0a6a')
                 if(creep.transfer(storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    creep.moveTo(storage)
+                    creep.moveTo(storage, {reusePath: 10})
                 }
             }
         }
@@ -42,7 +42,7 @@ module.exports = {
           } else {
            let source = creep.pos.findClosestByRange(FIND_SOURCES)
            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-               creep.moveTo(source)
+               creep.moveTo(source, {reusePath: 10})
            }
           }
         }

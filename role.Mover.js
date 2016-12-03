@@ -21,7 +21,7 @@ module.exports = {
             }
           }
           if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(target)
+              creep.moveTo(target,{reusePath: 10})
           }
       }
       else {

@@ -11,7 +11,7 @@ module.exports = {
   'W27N66' : [
     {
       name: 'Longhauler',
-      max: 4,
+      max: 0,
       spawn: 'HQ',
       parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da48'
@@ -20,9 +20,9 @@ module.exports = {
   'W27N68' : [
     {
       name: 'Harvester',
-      max: 4,
+      max: 3,
       spawn: 'HQ2',
-      parts: [WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
+      parts: [WORK,MOVE,MOVE,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da41'
     },
     {
@@ -34,7 +34,7 @@ module.exports = {
     },
     {
       name: 'Harvester2',
-      max: 3,
+      max: 2,
       spawn: 'HQ2',
       parts: [WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da42'
@@ -43,24 +43,31 @@ module.exports = {
       name: 'Upgrader',
       max: 3,
       spawn: 'HQ2',
-      parts: [WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY],
+      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY],
       energySource: '583f8e60d575dda40825619a'
     },
     {
       name: 'Fixer',
-      max: 0,
+      max: 1,
       spawn: 'HQ2',
       parts: [WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY]
     },
     {
       name: 'Mover',
-      max: 0,
+      max: 1,
       spawn: 'HQ2',
       parts: [WORK,WORK,MOVE,MOVE,CARRY,CARRY],
       energySource: '583f8e60d575dda40825619a'
     }
   ],
   'W27N67' : [
+    {
+      name: 'Harvester',
+      max: 3,
+      spawn: 'HQ',
+      parts: [WORK,MOVE,MOVE,CARRY,CARRY],
+      energySource: '57ef9d5d86f108ae6e60da45'
+    },
     {
       name: 'Upgrader',
       max: 4,
@@ -69,25 +76,10 @@ module.exports = {
       energySource: '57ef9d5d86f108ae6e60da44'
     },
     {
-      name: 'Harvester',
-      max: 3,
-      spawn: 'HQ',
-      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
-      energySource: '57ef9d5d86f108ae6e60da45'
-    },
-    {
-      name: 'Miner',
+      name: 'Builder',
       max: 1,
       spawn: 'HQ',
-      parts: [WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY],
-      energySource: '57efa00c195b160f02c75110'
-    },
-    {
-      name: 'Builder',
-      max: 4,
-      spawn: 'HQ',
-      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY],
-      energySource: '57ef9d5d86f108ae6e60da41'
+      parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY]
     },
     {
       name: 'Fixer',
@@ -102,6 +94,13 @@ module.exports = {
       spawn: 'HQ',
       parts: [WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY,CARRY,CARRY,CARRY],
       energySource: '57ef9d5d86f108ae6e60da44'
+    },
+    {
+      name: 'Miner',
+      max: 0,
+      spawn: 'HQ',
+      parts: [WORK,WORK,WORK,WORK,MOVE,MOVE,MOVE,CARRY,CARRY],
+      energySource: '57efa00c195b160f02c75110'
     },
     {
       name: 'Longhauler',

@@ -4,17 +4,17 @@ module.exports = {
       for(let id in Game.structures){
         let structure = Game.structures[id]
         if (structure.structureType == STRUCTURE_TOWER) {
-          let target = structure.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
-          if(target) {
-            structure.attack(target)
+          var targets = structure.pos.findInRange(FIND_HOSTILE_CREEPS, 3);
+          let target = structure.pos.findInRange(FIND_HOSTILE_CREEPS)
+          if(target.length > 0) {
+            structure.attack(target[0])
           } else {
-            let targetRepair = structure.pos.findClosestByRange(FIND_STRUCTURES, {
+            let targetRepair = structure.pos.findInRange(FIND_STRUCTURES, {
                 filter: function (item) {
                     if(
                        (item.structureType == STRUCTURE_ROAD && item.hits/item.hitsMax < 0.5) ||
                        (item.structureType == STRUCTURE_CONTAINER && item.hits/item.hitsMax < 0.25) ||
-                       (item.structureType == STRUCTURE_RAMPART && item.hits/item.hitsMax < 0.01) ||
-                       (item.structureType == STRUCTURE_WALL && item.hits/item.hitsMax < 0.001)
+                       (item.structureType == STRUCTURE_RAMPART && item.hits/item.hitsMax < 0.0001)
 
                     ) {
                         return true
@@ -22,9 +22,8 @@ module.exports = {
                     return false
                 }
             })
-  
-            if(targetRepair && structure.energy/structure.energyCapacity > 0.35){
-              structure.repair(targetRepair)
+            if(targetRepair.length > 0 && structure.energy/structure.energyCapacity > 0.25){
+              structure.repair(targetRepair[0])
             }
 
           }
