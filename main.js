@@ -10,13 +10,12 @@ const profiler = require('screeps-profiler')
 
 profiler.enable()
 module.exports.loop = function () {
+
   profiler.wrap(function() {
     if(Game.time % 200 == 0){
-      for(var i in Memory.creeps) {
-          if(!Game.creeps[i]) {
-              delete Memory.creeps[i];
-          }
-      }
+      _.each(Memory.creeps, creep => {
+        if(!Game.creeps[creep]) delete Memory.creeps[creep]
+      })
       _.each(Game.rooms, room => {
         room.memory.pieces = {}
         let results = room.lookAtArea(0, 0, 50, 50, true)
