@@ -1,6 +1,6 @@
 module.exports = {
     run:  function(creep) {
-        let dropped = creep.pos.findInRange(FIND_DROPPED_ENERGY,10)
+        var dropped = creep.room.find(FIND_DROPPED_RESOURCES);
         if(dropped[0] && creep.memory.role != 'Harvester') {
             if(creep.memory.role == 'Miner') {
                 dropped = creep.pos.findInRange( FIND_DROPPED_RESOURCES,10)

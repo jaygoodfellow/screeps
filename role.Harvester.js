@@ -13,45 +13,34 @@ module.exports = {
 
           if(creep.memory.target) {
             let structure = Game.getObjectById(creep.memory.target.id)
-            if(structure) if(structure.energy == structure.energyCapacity) creep.memory.target = []
+            if(structure) {
+              if(structure.energy == structure.energyCapacity) creep.memory.target = null
+            } else {
+              creep.memory.target = null
+            }
           }
-
-
-          if(creep.memory.target.length == 0){
-            target = creep.pos.findInRange(FIND_STRUCTURES, {
+          if(!creep.memory.target){
+            target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
-                  console.log(structure.structureType)
                     if((structure.structureType == STRUCTURE_EXTENSION && structure.energy < structure.energyCapacity)) {
                         return true
                     }
                     return false
                 }
             })
-
-            if(target.length == 0) {
-              target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                  filter: function (structure) {
-                      if( (structure.structureType == STRUCTURE_STORAGE) ) {
-                          return true
-                      }
-                      return false
-                  }
-              })
-            }
-
-            if(!target) {
-              target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                  filter: function (structure) {
-                      if( (structure.structureType == STRUCTURE_TOWER && structure.energy/structure.energyCapacity < 0.75) ) {
-                          return true
-                      }
-                      return false
-                  }
-              })
-            }
             creep.memory.target = target
           }
-
+          if(!creep.memory.target){
+            target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: function (structure) {
+                    if(structure.structureType == STRUCTURE_STORAGE) {
+                        return true
+                    }
+                    return false
+                }
+            })
+            creep.memory.target = target
+          }
           target = Game.getObjectById(creep.memory.target.id)
           if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
               creep.moveTo(target, {reusePath: 10})
