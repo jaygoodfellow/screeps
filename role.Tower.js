@@ -13,7 +13,7 @@ module.exports = {
         let road = _.sample(room.memory.pieces.road.concat(room.memory.pieces.rampart))
         if(road) {
           let targetRepair = Game.getObjectById(road[0])
-          if(targetRepair && tower.energy/tower.energyCapacity > 0.25){
+          if(targetRepair && tower.energy/tower.energyCapacity > 0.75){
             let result = tower.repair(targetRepair)
           }
         }

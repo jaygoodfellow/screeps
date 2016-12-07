@@ -12,6 +12,7 @@ profiler.enable()
 module.exports.loop = function () {
 
   profiler.wrap(function() {
+
     if(Game.time % 200 == 0){
       _.each(Memory.creeps, creep => {
         if(!Game.creeps[creep]) delete Memory.creeps[creep]
@@ -33,7 +34,9 @@ module.exports.loop = function () {
     }
 
     for(let name in Game.creeps) {
+        let startCpu = Game.cpu.getUsed()
         let creep = Game.creeps[name]
+        // if(Game.time % 4 == 0) {creep.say(creep.memory.role)}
         workForce[creep.memory.room][creep.memory.role]++
         if (creep.memory.role == 'Harvester' || creep.memory.role == 'Harvester2') {
           roleHarvester.run(creep)
@@ -46,6 +49,8 @@ module.exports.loop = function () {
         } else if (creep.memory.role == 'Mover') {
           roleMover.run(creep)
         }
+        var elapsed = Game.cpu.getUsed() - startCpu
+        //if(creep.name == 'Spawn_HQ_15811260') console.log(creep.name, creep.memory.working, creep.memory.role, elapsed.toFixed(2))
     }
 
     if(Game.time % 10 == 0) actionCreate.run(workForce)

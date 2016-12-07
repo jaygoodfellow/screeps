@@ -1,15 +1,22 @@
 const actionHarvest = require('action.Harvest')
 module.exports = {
     run: function(creep) {
-      if(creep.memory.moving && creep.carry.energy == 0) {
-          creep.memory.moving = false
+
+      if(creep.memory.working && creep.carry.energy == 0) {
+          creep.memory.working = false
       }
-      if(!creep.memory.moving && creep.carry.energy == creep.carryCapacity) {
-          creep.memory.moving = true
+      if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
+          creep.memory.working = true
       }
-      if(creep.memory.moving) {
+      if(creep.memory.working) {
           if(creep.room.name == 'W27N68') {
-            var target =  Game.getObjectById('583d0a473955c3bf77d29502')
+            var t1 =  Game.getObjectById('583d0a473955c3bf77d29502')
+            var t2 =  Game.getObjectById('5844767e423b498f11acf626')
+            if(t1.energy == 1000 && t2.energy === 1000) {
+              var target =  Game.getObjectById('5840fab34ef49db425671d8d')
+            } else {
+              var target = (t1.energy/t1.energyCapacity > t2.energy/t2.energyCapacity) ? t2 : t1
+            }
           }else {
             let tower1 = Game.getObjectById('5839152d9bc8c9ea6456797b')
             let tower2 = Game.getObjectById('58351d72eb22d4ca24273a5d')

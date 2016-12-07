@@ -15,6 +15,10 @@ module.exports = {
               current = struct[0].structure.energy
               max = 50
               break
+            case 'spawn':
+              current = structure.energy
+              max = 300
+              break
             case 'storage':
               current = _.sum(struct[0].store)
               max = 1000000
@@ -30,11 +34,11 @@ module.exports = {
         }
       })
       if(shortest[0]) {
-        // console.log(`${creep.name} found ${structure} in ${room} `)
+        //console.log(`${creep.name} found ${structure} in ${room} `)
         closest = Game.getObjectById(shortest[0][0])
         return false
       } else {
-        // console.log(`${creep.name} has nothing available for ${structure} in ${room} `)
+        //console.log(`${creep.name} has nothing available for ${structure} in ${room} `)
       }
     })
     return closest

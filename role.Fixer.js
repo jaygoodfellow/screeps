@@ -2,14 +2,14 @@ const actionHarvest = require('action.Harvest')
 module.exports = {
     run:  function(creep) {
 
-        if(creep.memory.fixing && creep.carry.energy == 0) {
-            creep.memory.fixing = false
+        if(creep.memory.working && creep.carry.energy == 0) {
+            creep.memory.working = false
         }
-        if(!creep.memory.fixing && creep.carry.energy == creep.carryCapacity) {
-            creep.memory.fixing = true
+        if(!creep.memory.working && creep.carry.energy == creep.carryCapacity) {
+            creep.memory.working = true
         }
 
-        if(creep.memory.fixing) {
+        if(creep.memory.working) {
 
             let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
