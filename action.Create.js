@@ -9,9 +9,9 @@ module.exports = {
       let roles = configRooms[room]
       let r = Game.rooms[room]
       let scalar = Math.floor(r.energyCapacityAvailable/BASE_SPAWN_COST)
-      if(scalar > 4) scalar = 2
+      if(scalar > 4) scalar = 4
       if (_.sum(workForce[room]) < 3 || scalar < 1) scalar = 1
-
+      if(room == 'W27N67') scalar = 2
       let totalParts = []
       for(let i=1;i<=scalar;i++){
         totalParts = totalParts.concat(baseParts['Worker'])

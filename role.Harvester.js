@@ -52,8 +52,16 @@ module.exports = {
                     return false
                 }
             })
-            //creep.memory.target = util.findClosest(creep, [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_STORAGE, STRUCTURE_TOWER])
-            //creep.memory.target = util.findClosest(creep, [STRUCTURE_EXTENSION])
+          }
+          if(!creep.memory.target) {
+            creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: function (structure) {
+                    if(structure.structureType == STRUCTURE_STORAGE) {
+                        return true
+                    }
+                    return false
+                }
+            })
           }
           target = Game.getObjectById(creep.memory.target.id)
           if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {

@@ -24,7 +24,7 @@ module.exports = {
     },
     {
       name: 'Mover',
-      max: 0,
+      max: 1,
       spawn: 'HQ2',
       parts: workerParts,
       energySource: '583f8e60d575dda40825619a'
@@ -53,10 +53,24 @@ module.exports = {
     },
     {
       name: 'Upgrader',
-      max: 4,
+      max: 3,
       spawn: 'HQ',
       parts: workerParts,
       energySource: '57ef9d5d86f108ae6e60da44'
+    },
+    {
+      name: 'Builder',
+      max: 0,
+      spawn: 'HQ',
+      parts: workerParts,
+      energySource: '5835d51f22c10df7453a0a6a'
+    },
+    {
+      name: 'Fixer',
+      max: 2,
+      spawn: 'HQ',
+      parts: workerParts,
+      energySource: '5835d51f22c10df7453a0a6a'
     },
     {
       name: 'Mover',
@@ -64,20 +78,6 @@ module.exports = {
       spawn: 'HQ',
       parts: workerParts,
       energySource: '57ef9d5d86f108ae6e60da44'
-    },
-    {
-      name: 'Builder',
-      max: 1,
-      spawn: 'HQ',
-      parts: workerParts,
-      energySource: '5835d51f22c10df7453a0a6a'
-    },
-    {
-      name: 'Fixer',
-      max: 1,
-      spawn: 'HQ',
-      parts: workerParts,
-      energySource: '5835d51f22c10df7453a0a6a'
     },
     {
       name: 'Soldier',

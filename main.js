@@ -10,7 +10,7 @@ const profiler = require('screeps-profiler')
 
 profiler.enable()
 module.exports.loop = function () {
-
+  
   profiler.wrap(function() {
 
     if(Game.time % 200 == 0){

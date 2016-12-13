@@ -19,7 +19,8 @@ module.exports = {
             }
           } else {
             let target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES)
-            let workOrders = ['58400e84b14a695e0d865421']
+            let workOrders = []
+            if(creep.room.name == 'W27N67') workOrders = ['584a7eaeb14a695e0d9445bb']
             for(let order of workOrders) {
               let workOrder = Game.getObjectById(order)
               if (workOrder) {
