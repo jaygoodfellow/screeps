@@ -1,7 +1,9 @@
 const actionHarvest = require('action.Harvest')
 module.exports = {
     run:  function(creep) {
-
+      // if(creep.room.name != 'W26N67'){
+      //   creep.moveTo(creep.pos.findClosestByPath(creep.room.findExitTo('W26N67')))
+      // } else{
         if(creep.memory.working && creep.carry.energy == 0) {
             creep.memory.working = false
         }
@@ -20,7 +22,7 @@ module.exports = {
           } else {
             let target = creep.pos.findClosestByRange(FIND_CONSTRUCTION_SITES)
             let workOrders = []
-            if(creep.room.name == 'W27N67') workOrders = ['584a7eaeb14a695e0d9445bb']
+            if(creep.room.name == 'W26N67') workOrders = ['5861cc172fdcb6941ed16a6c']
             for(let order of workOrders) {
               let workOrder = Game.getObjectById(order)
               if (workOrder) {
@@ -45,5 +47,6 @@ module.exports = {
             actionHarvest.run(creep)
            }
         }
+      // }
     }
 };

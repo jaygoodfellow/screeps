@@ -19,6 +19,7 @@ module.exports = {
           if(!desirableSource) source = creep.pos.findClosestByRange(FIND_SOURCES)
 
           if(typeof source.structureType != 'undefined') {
+              //creep.transfer(source, RESOURCE_GHODIUM_OXIDE)
             if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(source,{reusePath: 15})
             }

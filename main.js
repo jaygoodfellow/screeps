@@ -3,15 +3,17 @@ const roleFixer = require('role.Fixer')
 const roleHarvester = require('role.Harvester')
 const roleTower = require('role.Tower')
 const roleMover = require('role.Mover')
+const roleClaimer = require('role.Claimer')
+const roleSoldier = require('role.Soldier')
 const roleUpgrader = require('role.Upgrader')
 const actionCreate = require('action.Create')
 const actionHarvest = require('action.Harvest')
 const profiler = require('screeps-profiler')
 
-profiler.enable()
+// profiler.enable()
 module.exports.loop = function () {
-  
-  profiler.wrap(function() {
+
+  // profiler.wrap(function() {
 
     if(Game.time % 200 == 0){
       _.each(Memory.creeps, creep => {
@@ -29,33 +31,41 @@ module.exports.loop = function () {
       })
     }
     let workForce = {
-      'W27N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Mover': 0},
-      'W27N68': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Harvester2': 0, 'Mover': 0},
+      'W26N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Upgrader2': 0, 'Harvester': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
+      'W27N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Upgrader2': 0, 'Harvester': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
+      'W27N68': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Harvester2': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
     }
-
+    let time = 0
     for(let name in Game.creeps) {
-        let startCpu = Game.cpu.getUsed()
+
         let creep = Game.creeps[name]
-        // if(Game.time % 4 == 0) {creep.say(creep.memory.role)}
+
         workForce[creep.memory.room][creep.memory.role]++
+
         if (creep.memory.role == 'Harvester' || creep.memory.role == 'Harvester2') {
           roleHarvester.run(creep)
         } else if (creep.memory.role == 'Builder') {
           roleBuilder.run(creep)
         } else if (creep.memory.role == 'Fixer') {
           roleFixer.run(creep)
-        } else if(creep.memory.role == 'Upgrader') {
+        } else if(creep.memory.role == 'Upgrader' || creep.memory.role == 'Upgrader2') {
           roleUpgrader.run(creep)
         } else if (creep.memory.role == 'Mover') {
           roleMover.run(creep)
+        } else if (creep.memory.role == 'Soldier') {
+          roleSoldier.run(creep)
+        } else if (creep.memory.role == 'Claimer') {
+          roleClaimer.run(creep)
         }
-        var elapsed = Game.cpu.getUsed() - startCpu
-        //if(creep.name == 'Spawn_HQ_15811260') console.log(creep.name, creep.memory.working, creep.memory.role, elapsed.toFixed(2))
-    }
 
+    }
+    let startCpu = Game.cpu.getUsed()
     if(Game.time % 10 == 0) actionCreate.run(workForce)
     _.each(Game.rooms, room => {
       roleTower.run(room)
     })
-  })
+    var elapsed = Game.cpu.getUsed() - startCpu
+    time += elapsed
+
+  // })
 }

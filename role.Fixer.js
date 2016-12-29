@@ -14,10 +14,10 @@ module.exports = {
             let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
                     if(
-                      (structure.structureType == STRUCTURE_RAMPART && structure.hits < 500000) ||
-                      (structure.structureType == STRUCTURE_WALL && structure.hits < 150000) ||
-                      (structure.structureType == STRUCTURE_CONTAINER && structure.hits < 150000) ||
-                      (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.5)
+                      (structure.structureType == STRUCTURE_RAMPART && structure.hits/structure.hitsMax < 0.15) ||
+                      (structure.structureType == STRUCTURE_WALL && structure.hits/structure.hitsMax < 0.002) ||
+                      (structure.structureType == STRUCTURE_CONTAINER && structure.hits/structure.hitsMax < 0.5) ||
+                      (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.75)
                     ) {
                         return true
                     }
