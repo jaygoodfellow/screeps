@@ -6,9 +6,22 @@ module.exports = {
   run: function(room) {
     _.each(Game.creeps, creep => {
       if(creep.spawning === false) {
-        this.perform(creep)
+        if(creep.memory.job == 'explore') {
+          this.explore(creep)
+        } else {
+          this.perform(creep)
+        }
+
       }
     })
+  },
+  explore: function(creep) {
+    let targetRoom = creep.memory.tasks[0].target
+    let targetPos = new RoomPosition(25,25, targetRoom)
+    result = creep.moveTo(target)
+    IF()
+
+
   },
   perform: function(creep) {
     let action =  creep.memory.tasks[0].action

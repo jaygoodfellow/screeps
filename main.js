@@ -7,8 +7,10 @@ for(let i in config) {
 }
 module.exports.loop = function () {
   _.each(Game.rooms, room => {
-    init.run(room)
-    game.run(room)
+    if(typeof room.memory.workForce != 'undefined') {
+      init.run(room)
+      game.run(room)
+    }
   })
 
 }

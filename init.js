@@ -3,7 +3,7 @@ const task = require('./task')
 
 module.exports = {
   run: function(room) {
-    this.garbageCollection(room)
+
     this.initVars(room)
     this.longVars(room)
     this.gameVars(room)
@@ -12,18 +12,27 @@ module.exports = {
     room.memory.creeps = []
     room.memory.jobs = []
     room.memory.tasks = []
+    room.memory.controllerGrowth = (typeof room.memory.controllerGrowth  == 'undefined') ?  [] : _.takeRight(room.memory.controllerGrowth, 500)
+    if(typeof room.memory.controllerProgress != 'undefined')  room.memory.controllerGrowth.push(room.controller.progress-room.memory.controllerProgress)
+    room.memory.controllerProgress = room.controller.progress
 
+    let avg = _.sum(room.memory.controllerGrowth)/_.size(room.memory.controllerGrowth)
+    let eta = (room.controller.progressTotal-room.controller.progress)/avg*3.5/60
+    if(Game.time % 50 == 0) console.log('controller upgraded in ',  eta.toFixed(0), ' minutes')
     const results = room.lookForAtArea(LOOK_CREEPS, 0, 0, 50, 50, true)
     _.each(results, result => {
       let creep = result.creep
-      if(typeof creep.memory.tasks == 'undefined') creep.memory.tasks = []
-      if(creep.memory.tasks.length == 0) creep.memory.tasks = task.getTask(creep)
+      if(creep.owner.username != 'Invader') {
+        if(typeof creep.memory.tasks == 'undefined') creep.memory.tasks = []
+        if(creep.memory.tasks.length == 0) creep.memory.tasks = task.getTask(creep)
 
-      room.memory.creeps.push(creep.id)
-      room.memory.jobs.push(creep.memory.job)
-      room.memory.tasks.push(creep.memory.tasks[0].target)
-      if(Game.time % 10 == 0) creep.say(creep.memory.job[0] + ': ' + creep.ticksToLive)
+        room.memory.creeps.push(creep.id)
+        room.memory.jobs.push(creep.memory.job)
+        room.memory.tasks.push(creep.memory.tasks[0].target)
+        if(Game.time % 10 == 0) creep.say(creep.memory.job[0] + ': ' + creep.ticksToLive)
+      }
     })
+
   },
 
   longVars: function(room) {
@@ -33,20 +42,25 @@ module.exports = {
       room.memory.extensions = []
       room.memory.ramparts = []
       room.memory.walls = []
+      room.memory.towers = []
+      room.memory.storage = []
       const structures = room.lookForAtArea(LOOK_STRUCTURES, 0, 0, 50, 50, true)
       _.each(structures, structure => {
-        if(structure.structure.structureType == 'road') room.memory.roads.push(structure.structure.id)
-        if(structure.structure.structureType == 'constructedWall') room.memory.walls.push(structure.structure.id)
-        if(structure.structure.structureType == 'rampart') room.memory.ramparts.push(structure.structure.id)
-        if(structure.structure.structureType == 'extension') room.memory.extensions.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_ROAD) room.memory.roads.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_WALL) room.memory.walls.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_RAMPART) room.memory.ramparts.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_EXTENSION) room.memory.extensions.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_TOWER) room.memory.towers.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_STORAGE) room.memory.storage.push(structure.structure.id)
       })
+
       room.memory.constructionSites = []
       const sites = room.lookForAtArea(LOOK_CONSTRUCTION_SITES, 0, 0, 50, 50, true)
       _.each(sites, site => {
         room.memory.constructionSites.push(site.constructionSite.id)
       })
 
-
+      this.garbageCollection(room)
     }
   },
 
@@ -76,8 +90,8 @@ module.exports = {
     }
   },
   garbageCollection: function(room) {
-    _.each(Memory.creeps, creep => {
-      if(!Game.creeps[creep]) delete Memory.creeps[creep]
-    })
+    for(let i in Memory.creeps) {
+      if(!Game.creeps[i]) delete Memory.creeps[i]
+    }
   }
 }
