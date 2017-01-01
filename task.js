@@ -6,15 +6,17 @@ module.exports = {
     if(_.isEmpty(creep.memory.job)) creep.memory.job = this.getJob(creep.room)
 
     let structure = this.getStructure(creep)
+
     if(_.isEmpty(structure.target)) {
       creep.memory.job = this.getJob(creep.room)
       structure = this.getStructure(creep)
     }
 
-    if (_.sum(creep.carry) > 0 || creep.memory.job == 'explore') {
+    if (_.sum(creep.carry) > 0) {
       return [structure]
     } else {
       let source = this.getSource(structure, creep)
+
       return [source, structure]
     }
 
@@ -37,10 +39,8 @@ module.exports = {
         target = hud.findRepair(creep)
         break
       case 'harvest':
-        target = hud.findTransfer(creep)
-        break
-      case 'explore':
-        target = hud.findExplorable(creep)
+        target = hud.findHarvest(creep)
+        action = 'transfer'
         break
     }
 
@@ -48,35 +48,48 @@ module.exports = {
       target = creep.room.memory.controller[0]
       action= 'upgradeController'
     }
-
-    return {target, action, room: creep.room.name}
+    let room = Game.getObjectById(target).room.name
+    return {target, action, room}
   },
   getSource: function(structure, creep) {
-    let altSources = {
+    const altSources = {
       'W76N79': ['W76N78']
+    }
+    const priority = {
+      'build':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
+      'upgradeController':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
+      'repair':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
+      'transfer':   [LOOK_SOURCES, STRUCTURE_STORAGE, STRUCTURE_CONTAINER],
+      'harvest':   [LOOK_SOURCES, STRUCTURE_STORAGE, STRUCTURE_CONTAINER]
     }
     let source = null
     let room = creep.room.name
     let finalSites = []
 
-    let altRoom =  _.sample(altSources.room)
-    if(structure.action == 'transfer' && typeof altRoom != 'undefined' && typeof Game.rooms[altRoom] != 'undefined') {
-      room = _.sample(altSources.room)
+    let altRoom =  _.sample(altSources[room])
+    if(creep.memory.job == 'harvest' && typeof altRoom != 'undefined' && typeof Memory.rooms[altRoom] != 'undefined') {
+      room = altRoom
     }
-    let possibleSites = Game.rooms[room].memory.sources
+    let possibleSites = Memory.rooms[room].sources.concat(Memory.rooms[room].storage || [])
 
     let struct = Game.getObjectById(structure.target)
+
     for(let i of possibleSites) {
       let item = Game.getObjectById(i)
+      if(item == null) item = {pos:{x:0, y:0}} //no clue how this can happen but it does and it breaks things
+      let distance = (item == null) ? 0 : Math.abs(Math.sqrt(Math.pow(struct.pos.x - item.pos.x, 2) + Math.pow(struct.pos.y - item.pos.y, 2)))
       finalSites.push({
-      'site': i,
-      distance: Math.abs(Math.sqrt(Math.pow(struct.pos.x - item.pos.x, 2) + Math.pow(struct.pos.y - item.pos.y, 2)))
+      site: i,
+      action: (typeof item.structureType == 'undefined') ? 'harvest' : 'withdraw',
+      priority: priority[structure.action].indexOf(item.structureType || 'source'),
+      distance: distance
       })
+
     }
-    let sortedSites = _.sortByOrder(finalSites, 'distance', 'asc')
+    let sortedSites = _.sortByOrder(finalSites, ['priority', 'distance'], ['asc', 'asc'])
     return source = {
       target: sortedSites[0].site,
-      action: 'harvest',
+      action: sortedSites[0].action,
       room: room
     }
   },

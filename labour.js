@@ -6,30 +6,28 @@ module.exports = {
   run: function(room) {
     _.each(Game.creeps, creep => {
       if(creep.spawning === false) {
-        if(creep.memory.job == 'explore') {
-          this.explore(creep)
-        } else {
+        let targetRoom = creep.memory.tasks[0].room
+
+        if(targetRoom == creep.room.name) {
           this.perform(creep)
+        } else {
+          let result = creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(targetRoom)), {reusePath: 25})
         }
 
       }
     })
   },
-  explore: function(creep) {
-    let targetRoom = creep.memory.tasks[0].target
-    let targetPos = new RoomPosition(25,25, targetRoom)
-    result = creep.moveTo(target)
-    IF()
-
-
-  },
   perform: function(creep) {
     let action =  creep.memory.tasks[0].action
+
     let target = Game.getObjectById(creep.memory.tasks[0].target)
     switch(action) {
       case 'harvest':
+      result = creep[action](target)
+      if (_.sum(creep.carry) == creep.carryCapacity) creep.memory.tasks.shift()
+      break
       case 'withdraw':
-        result = creep[action](target)
+        result = creep[action](target, RESOURCE_ENERGY)
         if (_.sum(creep.carry) == creep.carryCapacity) creep.memory.tasks.shift()
         break
       case 'upgradeController':

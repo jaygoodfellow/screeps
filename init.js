@@ -12,38 +12,43 @@ module.exports = {
     room.memory.creeps = []
     room.memory.jobs = []
     room.memory.tasks = []
-    room.memory.controllerGrowth = (typeof room.memory.controllerGrowth  == 'undefined') ?  [] : _.takeRight(room.memory.controllerGrowth, 500)
+
+    //calculate when controller will level up
+    room.memory.controllerGrowth = (typeof room.memory.controllerGrowth  == 'undefined') ?  [] : _.takeRight(room.memory.controllerGrowth, 1000)
     if(typeof room.memory.controllerProgress != 'undefined')  room.memory.controllerGrowth.push(room.controller.progress-room.memory.controllerProgress)
     room.memory.controllerProgress = room.controller.progress
 
-    let avg = _.sum(room.memory.controllerGrowth)/_.size(room.memory.controllerGrowth)
-    let eta = (room.controller.progressTotal-room.controller.progress)/avg*3.5/60
-    if(Game.time % 50 == 0) console.log('controller upgraded in ',  eta.toFixed(0), ' minutes')
+
     const results = room.lookForAtArea(LOOK_CREEPS, 0, 0, 50, 50, true)
     _.each(results, result => {
       let creep = result.creep
-      if(creep.owner.username != 'Invader') {
+      if(creep.owner.username == 'vongoo') {
         if(typeof creep.memory.tasks == 'undefined') creep.memory.tasks = []
         if(creep.memory.tasks.length == 0) creep.memory.tasks = task.getTask(creep)
 
         room.memory.creeps.push(creep.id)
         room.memory.jobs.push(creep.memory.job)
         room.memory.tasks.push(creep.memory.tasks[0].target)
-        if(Game.time % 10 == 0) creep.say(creep.memory.job[0] + ': ' + creep.ticksToLive)
       }
     })
-
+    //if(Game.time % 10 == 0) console.log(room.memory.jobs) //creep.say(creep.memory.job[0] + ': ' + creep.ticksToLive)
   },
 
   longVars: function(room) {
 
-    if(typeof room.memory.roads == 'undefined' || Game.time % 50 == 0 || 0 == 0) {
+    if(typeof room.memory.roads == 'undefined' || Game.time % 50 == 0 ) {
+
+      let avg = _.sum(room.memory.controllerGrowth)/_.size(room.memory.controllerGrowth)
+      let eta = (room.controller.progressTotal-room.controller.progress)/avg*3.5/60/60
+      console.log('controller upgraded in ',  eta.toFixed(2), ' hours')
+
       room.memory.roads = []
       room.memory.extensions = []
       room.memory.ramparts = []
       room.memory.walls = []
       room.memory.towers = []
       room.memory.storage = []
+      room.memory.containers = []
       const structures = room.lookForAtArea(LOOK_STRUCTURES, 0, 0, 50, 50, true)
       _.each(structures, structure => {
         if(structure.structure.structureType == STRUCTURE_ROAD) room.memory.roads.push(structure.structure.id)
@@ -52,6 +57,7 @@ module.exports = {
         if(structure.structure.structureType == STRUCTURE_EXTENSION) room.memory.extensions.push(structure.structure.id)
         if(structure.structure.structureType == STRUCTURE_TOWER) room.memory.towers.push(structure.structure.id)
         if(structure.structure.structureType == STRUCTURE_STORAGE) room.memory.storage.push(structure.structure.id)
+        if(structure.structure.structureType == STRUCTURE_CONTAINER) room.memory.containers.push(structure.structure.id)
       })
 
       room.memory.constructionSites = []

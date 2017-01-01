@@ -1,9 +1,9 @@
 module.exports = {
-  'W76N79': {
+  'E71S2': {
     'transfer': 2,
-    'repair': 1,
-    'build': 0,
-    'upgradeController': 3,
-    'explore': 0
+    'upgradeController': 1,
+    'build': 2,
+    'repair': 0,
+    'harvest': 0
   }
 }
