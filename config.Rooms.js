@@ -1,9 +1,9 @@
 module.exports = {
-  'E71S2': {
-    'transfer': 2,
+  'W57S75': {
+    'transfer': 1,
     'upgradeController': 1,
-    'build': 2,
+    'build': 0,
     'repair': 0,
-    'harvest': 0
+    'harvest': 1
   }
 }

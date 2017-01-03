@@ -24,6 +24,7 @@ module.exports = {
       let creep = result.creep
       if(creep.owner.username == 'vongoo') {
         if(typeof creep.memory.tasks == 'undefined') creep.memory.tasks = []
+
         if(creep.memory.tasks.length == 0) creep.memory.tasks = task.getTask(creep)
 
         room.memory.creeps.push(creep.id)
@@ -36,7 +37,7 @@ module.exports = {
 
   longVars: function(room) {
 
-    if(typeof room.memory.roads == 'undefined' || Game.time % 50 == 0 ) {
+    if(typeof room.memory.roads == 'undefined' || Game.time % 50 == 0) {
 
       let avg = _.sum(room.memory.controllerGrowth)/_.size(room.memory.controllerGrowth)
       let eta = (room.controller.progressTotal-room.controller.progress)/avg*3.5/60/60

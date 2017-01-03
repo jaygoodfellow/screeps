@@ -7,25 +7,24 @@ module.exports = {
     _.each(Game.creeps, creep => {
       if(creep.spawning === false) {
         let targetRoom = creep.memory.tasks[0].room
-
         if(targetRoom == creep.room.name) {
           this.perform(creep)
         } else {
           let result = creep.moveTo(creep.pos.findClosestByRange(creep.room.findExitTo(targetRoom)), {reusePath: 25})
         }
-
       }
     })
   },
   perform: function(creep) {
     let action =  creep.memory.tasks[0].action
-
     let target = Game.getObjectById(creep.memory.tasks[0].target)
+    let result = null
+
     switch(action) {
       case 'harvest':
-      result = creep[action](target)
-      if (_.sum(creep.carry) == creep.carryCapacity) creep.memory.tasks.shift()
-      break
+        result = creep[action](target)
+        if (_.sum(creep.carry) == creep.carryCapacity) creep.memory.tasks.shift()
+        break
       case 'withdraw':
         result = creep[action](target, RESOURCE_ENERGY)
         if (_.sum(creep.carry) == creep.carryCapacity) creep.memory.tasks.shift()

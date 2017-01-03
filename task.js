@@ -6,17 +6,13 @@ module.exports = {
     if(_.isEmpty(creep.memory.job)) creep.memory.job = this.getJob(creep.room)
 
     let structure = this.getStructure(creep)
-
-    if(_.isEmpty(structure.target)) {
-      creep.memory.job = this.getJob(creep.room)
-      structure = this.getStructure(creep)
-    }
+    
+    let source = null
 
     if (_.sum(creep.carry) > 0) {
       return [structure]
     } else {
-      let source = this.getSource(structure, creep)
-
+      source = this.getSource(structure, creep)
       return [source, structure]
     }
 
@@ -25,6 +21,7 @@ module.exports = {
     let target = null
     let action = creep.memory.job
     if(action == null) action = 'transfer'
+
     switch(action) {
       case 'build':
         target = hud.findBuild(creep)
@@ -39,8 +36,7 @@ module.exports = {
         target = hud.findRepair(creep)
         break
       case 'harvest':
-        target = hud.findHarvest(creep)
-        action = 'transfer'
+        target = '586ad378329d92f704de0f7b' //hud.findHarvest(creep)
         break
     }
 
@@ -57,10 +53,10 @@ module.exports = {
     }
     const priority = {
       'build':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
-      'upgradeController':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
+      'upgradeController':   [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, LOOK_SOURCES],
       'repair':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
-      'transfer':   [LOOK_SOURCES, STRUCTURE_STORAGE, STRUCTURE_CONTAINER],
-      'harvest':   [LOOK_SOURCES, STRUCTURE_STORAGE, STRUCTURE_CONTAINER]
+      'transfer':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER],
+      'harvest':   [LOOK_SOURCES]
     }
     let source = null
     let room = creep.room.name
