@@ -1,6 +1,6 @@
 module.exports = {
   run: function(room) {
-    const targets = room.find(FIND_HOSTILE_CREEPS)
+    const targets = Game.rooms[room].find(FIND_HOSTILE_CREEPS)
     let hostiles = []
     for(let i in targets) {
       let bodyCount = _.countBy(targets[i].body, 'type')
@@ -12,7 +12,7 @@ module.exports = {
     }
     let sortedHostiles = _.sortByOrder(hostiles, ['healer',  'strength'], ['desc', 'desc'])
     if(sortedHostiles.length > 0) {
-      for(let j of room.memory.towers) {
+      for(let j of Memory.rooms[room].structures.tower) {
         let result = Game.getObjectById(j).attack(Game.getObjectById(sortedHostiles[0].id))
       }
     }

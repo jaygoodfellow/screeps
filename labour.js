@@ -5,7 +5,9 @@ const hud = require('./hud')
 module.exports = {
   run: function(room) {
     _.each(Game.creeps, creep => {
-      if(creep.spawning === false) {
+      if(_.isEmpty(creep.memory.tasks)) creep.memory.tasks = task.getTask(creep)
+
+      if(creep.spawning == false) {
         let targetRoom = creep.memory.tasks[0].room
         if(targetRoom == creep.room.name) {
           this.perform(creep)

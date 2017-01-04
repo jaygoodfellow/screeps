@@ -6,7 +6,7 @@ module.exports = {
     if(_.isEmpty(creep.memory.job)) creep.memory.job = this.getJob(creep.room)
 
     let structure = this.getStructure(creep)
-    
+
     let source = null
 
     if (_.sum(creep.carry) > 0) {
@@ -18,35 +18,42 @@ module.exports = {
 
   },
   getStructure: function(creep) {
-    let target = null
-    let action = creep.memory.job
-    if(action == null) action = 'transfer'
+    switch(creep.memory.job) {
+      case 'General':
+        let target = hud.findBuild(creep)
 
-    switch(action) {
-      case 'build':
-        target = hud.findBuild(creep)
+        if(target) {
+          let room = Game.getObjectById(target).room.name
+          return {target, action: 'build', room}
+        } else {
+          let pool = new Array(1000)
+          let repair = hud.findRepair(creep)
+          let transfer = hud.findTransfer(creep)
+          if(repair) _.fill(pool, {target: repair, action: 'repair'},0, 333)
+          _.fill(pool, {target: creep.room.memory.structures.controller[0], action: 'upgradeController'},333, 666)
+          if(transfer) _.fill(pool, {target: hud.findTransfer(creep), action: 'transfer'},666, 1000)
+          let result = _.sample(_.compact(pool))
+
+          let room = Game.getObjectById(result.target).room.name
+          return {target: result.target, action: result.action, room}
+        }
+
+
+        return {target, action, room}
         break
-      case 'upgradeController':
-        target = creep.room.memory.controller[0]
+      case 'Digger':
+      //source
+      //container-storage
         break
-      case 'transfer':
-        target = hud.findTransfer(creep)
+      case 'Hauler':
+      //container-storage
+      //container-storage
         break
-      case 'repair':
-        target = hud.findRepair(creep)
-        break
-      case 'harvest':
-        target = '586ad378329d92f704de0f7b' //hud.findHarvest(creep)
+      case 'Soldier':
         break
     }
-
-    if(target == null) {
-      target = creep.room.memory.controller[0]
-      action= 'upgradeController'
-    }
-    let room = Game.getObjectById(target).room.name
-    return {target, action, room}
   },
+
   getSource: function(structure, creep) {
     const altSources = {
       'W76N79': ['W76N78']
@@ -55,8 +62,7 @@ module.exports = {
       'build':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
       'upgradeController':   [STRUCTURE_CONTAINER, STRUCTURE_STORAGE, LOOK_SOURCES],
       'repair':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
-      'transfer':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER],
-      'harvest':   [LOOK_SOURCES]
+      'transfer':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER]
     }
     let source = null
     let room = creep.room.name
@@ -69,7 +75,7 @@ module.exports = {
     let possibleSites = Memory.rooms[room].sources.concat(Memory.rooms[room].storage || [])
 
     let struct = Game.getObjectById(structure.target)
-
+    console.log(structure.action)
     for(let i of possibleSites) {
       let item = Game.getObjectById(i)
       if(item == null) item = {pos:{x:0, y:0}} //no clue how this can happen but it does and it breaks things
