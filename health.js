@@ -12,6 +12,10 @@ const DNA = {
     baseCost: 150,
     baseParts: [MOVE,CARRY,CARRY]
   },
+  'Worker':  {
+    baseCost: 300,
+    baseParts: [WORK,WORK,MOVE,CARRY]
+  },
   'Soldier': {
     baseCost: 130,
     baseParts: [MOVE,ATTACK]
@@ -21,21 +25,25 @@ const DNA = {
 module.exports = {
   run: function(room) {
     let rm = Memory.rooms[room]
-
     if(_.sum(rm.currentJobs) < _.sum(rm.plannedJobs)) {
+
       for(let job in rm.plannedJobs) {
-        if(rm.currentJobs[job] || 0 < rm.plannedJobs[job]) {
+        const currentJobCount = rm.currentJobs[job] || 0
+        const expectedJobCount = rm.plannedJobs[job]
+
+        if(currentJobCount < expectedJobCount) {
 
           let scalar = Math.floor(Game.rooms[room].energyCapacityAvailable/DNA[job].baseCost) - 1
-          if(_.sum(rm.currentJobs) <= 2 || scalar < 1) scalar = 1
 
+          if(_.sum(rm.currentJobs) <= 2 || scalar < 1) scalar = 1
           if(Game.rooms[room].energyAvailable >= scalar * DNA[job].baseCost) {
-            let spawnName = `${room}_${job}_${Game.time}`
+            const spawnName = `${room}_${job}_${Game.time}`
             let totalParts = []
             for(let i=1; i<=scalar; i++) {
               totalParts = totalParts.concat(DNA[job].baseParts)
             }
             let result = Game.getObjectById(Memory.rooms[room].structures.spawn[0]).createCreep(totalParts, spawnName, {job})
+
           }
           break
         }

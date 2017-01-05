@@ -1,13 +1,18 @@
 module.exports = {
-  W7N7: {
+  W57S75: {
     jobs: {
-      General: 6,
-      Digger: 0,
-      Hauler: 0
-    },
-    tasks: [
-      {job: 'General', in: '33bd077274d064f', out: '6aa0077274df11c'}
-    ]
+      General: 1,
+      Digger: 1,
+      Hauler: 1,
+      Worker: 0
+    }
+    // ,jobs: {
+    //   General: 1,
+    //   Digger: 1,
+    //   Hauler: 1,
+    //   Worker: 1
+    // }
+
   }
 
 }

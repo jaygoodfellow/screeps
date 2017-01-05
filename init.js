@@ -15,15 +15,17 @@ module.exports = {
     rm.controllerProgress = Game.rooms[room].controller.progress
 
     rm.currentJobs = {}
+    rm.tasks = []
     for(let i in Game.creeps) {
       let job = Game.creeps[i].memory.job
       rm.currentJobs[job] = ++rm.currentJobs[job] || 1
+      if(!_.isEmpty(Game.creeps[i].memory.tasks))  rm.tasks.push(Game.creeps[i].memory.tasks[0].target)
     }
   },
 
   longVars: function(room) {
     let rm = Memory.rooms[room]
-    if(typeof rm.structures == 'undefined' || Game.time % 50 == 0 || 0 == 0) {
+    if(typeof rm.structures == 'undefined' || Game.time % 50 == 0) {
 
       rm.structures = {}
       const structureResults = Game.rooms[room].lookForAtArea(LOOK_STRUCTURES, 0, 0, 50, 50, true)

@@ -8,21 +8,22 @@ module.exports = {
   },
 
   findRepair: function(creep) {
-    const priority = []
+    const priority = [STRUCTURE_CONTAINER, STRUCTURE_RAMPART, STRUCTURE_WALL, STRUCTURE_ROAD]
     let r = creep.room
 
     var finalSites = []
-    let sites = (r.memory.structures.road || []).concat(r.memory.structures.wall).concat(r.memory.structures.rampart)
+    let sites = (r.memory.structures.road || []).concat(r.memory.structures.wall).concat(r.memory.structures.rampart).concat(r.memory.structures.container)
     for(let i in sites) {
       let site = Game.getObjectById(sites[i])
       if(site  && r.memory.tasks.indexOf(site.id) == -1 ) {
         site.distance = Math.abs(Math.sqrt(Math.pow(creep.pos.x - site.pos.x, 2) + Math.pow(creep.pos.y - site.pos.y, 2)))
         site.priority = priority.indexOf(site.structureType)
-        site.percent = (site.hits/site.hitsMax*100).toFixed(5)
+        site.percent = parseFloat((site.hits/site.hitsMax*100).toFixed(5))
         finalSites.push(site)
       }
     }
     let sortedSites = _.sortByOrder(finalSites, ['priority', 'percent', 'distance'], ['asc', 'asc', 'asc'])
+
     return (sortedSites.length > 0) ? sortedSites[0].id : null
 
   },
@@ -49,15 +50,18 @@ module.exports = {
 
   },
   findTransfer: function(creep) {
-    const priority = [STRUCTURE_TOWER, STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_STORAGE, STRUCTURE_CONTAINER]
+    const priority = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_STORAGE, STRUCTURE_CONTAINER]
     let finalSites = []
 
-    let possibleSites = (creep.room.memory.structures.spawn || []).concat(creep.room.memory.structures.extensions || []).concat(creep.room.memory.structures.towers || [])
+    let possibleSites = (Memory.rooms[creep.room.name].structures.spawn || []).concat(Memory.rooms[creep.room.name].structures.extension || []).concat(Memory.rooms[creep.room.name].structures.tower || [])
+
     for(let i of possibleSites) {
       let item = Game.getObjectById(i)
+
       if(item != null) {
+
         if(
-            (item.structureType == STRUCTURE_EXTENSION && item.energy < 50 && creep.room.memory.tasks.indexOf(i) == -1 ) ||   //an extension not at filled and not in queue to be filled
+            (item.structureType == STRUCTURE_EXTENSION && item.energy < 50 ) ||
             (item.structureType == STRUCTURE_SPAWN && item.energy < 300) ||
             (item.structureType == STRUCTURE_TOWER && item.energy < 1000) ||
             (item.structureType == STRUCTURE_CONTAINER && _.sum(item.store) < 2000) ||
@@ -71,8 +75,9 @@ module.exports = {
         }
       }
     }
-
+console.log('dave', JSON.stringify(finalSites))
     let sortedSites = _.sortByOrder(finalSites, ['priority',  'distance'], ['asc',  'asc'])
+    //console.log(JSON.stringify(sortedSites))
     return (sortedSites.length > 0) ? sortedSites[0].site : null
 
   }
