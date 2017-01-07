@@ -27,7 +27,7 @@ module.exports = {
     }
 
     let sortedSites = _.sortByOrder(finalSites, ['percent', 'distance'], ['asc', 'asc'])
-//console.log(JSON.stringify(sortedSites))
+
     return (sortedSites.length > 0) ? sortedSites[0].id : null
 
   },
@@ -47,13 +47,11 @@ module.exports = {
         }
       }
       let sortedSites = _.sortByOrder(finalSites, ['distance'], ['asc'])
-      //console.log(JSON.stringify(sortedSites))
+
       return (sortedSites.length > 0) ? sortedSites[0].id : null
 
   },
-  findHarvest: function(creep) {
 
-  },
   findTransfer: function(creep) {
     const priority = [STRUCTURE_EXTENSION, STRUCTURE_SPAWN, STRUCTURE_TOWER, STRUCTURE_STORAGE, STRUCTURE_CONTAINER]
     let finalSites = []

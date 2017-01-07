@@ -3,11 +3,12 @@ const task = require('./task')
 
 module.exports = {
   run: function(room) {
-    this.initVars(room)
+    this.shortVars(room)
     this.longVars(room)
     this.gameVars(room)
+    this.garbageCollection(room)
   },
-  initVars: function(room) {
+  shortVars: function(room) {
     let rm = Memory.rooms[room]
 
     rm.controllerGrowth = (typeof rm.controllerGrowth  == 'undefined') ?  [] : _.takeRight(rm.controllerGrowth, 1000)
@@ -45,6 +46,7 @@ module.exports = {
 
       this.garbageCollection(room)
     }
+    return true
   },
 
   gameVars: function(room) {
@@ -56,6 +58,7 @@ module.exports = {
         rm.sources.push(source.source.id)
       })
     }
+    return true
   },
   garbageCollection: function(room) {
 

@@ -22,7 +22,6 @@ module.exports = {
           let tower = Game.getObjectById(j)
           let targetRepair = Game.getObjectById(hud.findRepair(_.sample(Game.creeps)))
           let result = tower.repair(targetRepair)
-          console.log(targetRepair.structureType, targetRepair.percent)
         }
       }
     }
