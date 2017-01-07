@@ -1,18 +1,12 @@
 module.exports = {
   W57S75: {
     jobs: {
-      General: 1,
+      Tanker: 1,
       Digger: 1,
       Hauler: 1,
-      Worker: 0
+      Worker: 2,
+      General: 1
     }
-    // ,jobs: {
-    //   General: 1,
-    //   Digger: 1,
-    //   Hauler: 1,
-    //   Worker: 1
-    // }
-
   }
 
 }

@@ -6,7 +6,6 @@ module.exports = {
     if(_.isEmpty(creep.memory.job)) creep.memory.job = this.getJob(creep.room)
 
     let structure = this.getStructure(creep)
-
     let source = null
 
     if (_.sum(creep.carry) > 0) {
@@ -23,23 +22,26 @@ module.exports = {
       case 'General':
         let pool = new Array(1000)
         let build = hud.findBuild(creep)
-        let repair = hud.findRepair(creep)
         let transfer = hud.findTransfer(creep)
-        console.log(transfer)
-        // _.fill(pool, {target: creep.room.memory.structures.controller[0], action: 'upgradeController'},0, 250)
-        // if(repair) _.fill(pool, {target: repair, action: 'repair'},250, 500)
-        // if(build) _.fill(pool, {target: build, action: 'build'},500, 750)
-        if(transfer) _.fill(pool, {target: transfer, action: 'transfer'}, 0, 1000)
+        if(build) _.fill(pool, {target: build, action: 'build'}, 0, 500)
+        if(transfer) _.fill(pool, {target: transfer, action: 'transfer'}, 500, 1000)
         let result = _.sample(_.compact(pool))
-console.log(JSON.stringify(pool))
+        creep.say(result.action)
         room = Game.getObjectById(result.target).room.name
         return {target: result.target, action: result.action, room}
         break
       case 'Digger':
         room = Game.getObjectById('5836b7328b8b9619519effe5').room.name
-        return {target: '5836b7328b8b9619519effe5', action: 'digger', room, pos: [10,4]}
-      //source
-      //container-storage
+        return {target: '5836b7328b8b9619519effe5', action: 'digger', room, pos: [{x:10,y:4}]}
+        break
+      case 'Worker':
+        room = Game.getObjectById('5836b7328b8b9619519effe6').room.name
+        return {target: '5836b7328b8b9619519effe6', action: 'worker', room, pos: [{x:6,y:11},{x:5,y:12}]}
+        break
+      case 'Tanker':
+        var obj = Game.getObjectById('586ac2b0c04c074e4f20072b')
+        if(obj.energy == obj.energyCapacity) obj = Game.getObjectById('586d12cd00257e047d1abb03')
+        return {target: obj.id, action: 'transfer', room: obj.room.name, pos: [{x:10,y:3}]}
         break
       case 'Hauler':
         let target = Game.getObjectById('586dc2b754a1341036e1b233')
@@ -48,8 +50,6 @@ console.log(JSON.stringify(pool))
         }
         room = target.room.name
         return {target: target.id, action: 'hauler', room}
-      //container-storage
-      //container-storage
         break
       case 'Soldier':
         break
@@ -66,7 +66,8 @@ console.log(JSON.stringify(pool))
       'repair':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER, LOOK_SOURCES],
       'transfer':   [STRUCTURE_STORAGE, STRUCTURE_CONTAINER],
       'digger': [LOOK_SOURCES, STRUCTURE_CONTAINER, STRUCTURE_STORAGE],
-      'hauler': [STRUCTURE_CONTAINER, LOOK_SOURCES, STRUCTURE_STORAGE]
+      'hauler': [STRUCTURE_CONTAINER, LOOK_SOURCES, STRUCTURE_STORAGE],
+      'worker': [STRUCTURE_CONTAINER, LOOK_SOURCES, STRUCTURE_STORAGE]
     }
     let source = null
     let room = creep.room.name
@@ -76,16 +77,21 @@ console.log(JSON.stringify(pool))
     if(creep.memory.job == 'harvest' && typeof altRoom != 'undefined' && typeof Memory.rooms[altRoom] != 'undefined') {
       room = altRoom
     }
-    if(structure.action == 'hauler') {
-      var possibleSites = ['586d1ca054caccee7a2bd79a']
-    }  else if(structure.action == 'worker') {
-      var possibleSites = ['586dc2b754a1341036e1b233']
-    } else {
-      var possibleSites = Memory.rooms[room].sources.concat(Memory.rooms[room].storage || [])
+    switch(structure.action){
+      case 'hauler':
+        var possibleSites = ['586d1ca054caccee7a2bd79a']
+        break
+      case 'worker':
+        var possibleSites = ['586dc2b754a1341036e1b233']
+        break
+      default:
+        var possibleSites = ['5836b7328b8b9619519effe5']
+        break
     }
 
-
+    if(creep.memory.job == 'General') possibleSites = ['5836b7328b8b9619519effe7']
     let struct = Game.getObjectById(structure.target)
+
 
     for(let i of possibleSites) {
       let item = Game.getObjectById(i)
@@ -100,6 +106,7 @@ console.log(JSON.stringify(pool))
 
     }
     let sortedSites = _.sortByOrder(finalSites, ['priority', 'distance'], ['asc', 'asc'])
+
     return source = {
       target: sortedSites[0].site,
       action: sortedSites[0].action,

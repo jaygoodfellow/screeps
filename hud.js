@@ -8,22 +8,26 @@ module.exports = {
   },
 
   findRepair: function(creep) {
-    const priority = [STRUCTURE_CONTAINER, STRUCTURE_RAMPART, STRUCTURE_WALL, STRUCTURE_ROAD]
+    const priority = [STRUCTURE_CONTAINER, STRUCTURE_WALL,  STRUCTURE_RAMPART, STRUCTURE_ROAD]
     let r = creep.room
-
     var finalSites = []
-    let sites = (r.memory.structures.road || []).concat(r.memory.structures.wall).concat(r.memory.structures.rampart).concat(r.memory.structures.container)
+    let sites = (r.memory.structures.road || []).concat(r.memory.structures.constructedWall).concat(r.memory.structures.rampart).concat(r.memory.structures.container)
     for(let i in sites) {
       let site = Game.getObjectById(sites[i])
       if(site  && r.memory.tasks.indexOf(site.id) == -1 ) {
+        site.adjustedMax = site.hitsMax
+        if(site.structureType == 'constructedWall') site.adjustedMax = site.hitsMax/3000
+        if(site.structureType == 'rampart') site.adjustedMax = site.hitsMax/3
         site.distance = Math.abs(Math.sqrt(Math.pow(creep.pos.x - site.pos.x, 2) + Math.pow(creep.pos.y - site.pos.y, 2)))
         site.priority = priority.indexOf(site.structureType)
-        site.percent = parseFloat((site.hits/site.hitsMax*100).toFixed(5))
-        finalSites.push(site)
+        site.percent = parseFloat((site.hits/site.adjustedMax*100).toFixed(5))
+
+        if(site.percent < 100)  finalSites.push(site)
       }
     }
-    let sortedSites = _.sortByOrder(finalSites, ['priority', 'percent', 'distance'], ['asc', 'asc', 'asc'])
 
+    let sortedSites = _.sortByOrder(finalSites, ['percent', 'distance'], ['asc', 'asc'])
+//console.log(JSON.stringify(sortedSites))
     return (sortedSites.length > 0) ? sortedSites[0].id : null
 
   },
@@ -42,7 +46,8 @@ module.exports = {
           finalSites.push(site)
         }
       }
-      let sortedSites = _.sortByOrder(finalSites, ['priority', 'percent', 'distance'], ['asc', 'desc', 'asc'])
+      let sortedSites = _.sortByOrder(finalSites, ['distance'], ['asc'])
+      //console.log(JSON.stringify(sortedSites))
       return (sortedSites.length > 0) ? sortedSites[0].id : null
 
   },
@@ -62,8 +67,8 @@ module.exports = {
 
         if(
             (item.structureType == STRUCTURE_EXTENSION && item.energy < 50 ) ||
-            (item.structureType == STRUCTURE_SPAWN && item.energy < 300) ||
-            (item.structureType == STRUCTURE_TOWER && item.energy < 1000) ||
+            //(item.structureType == STRUCTURE_SPAWN && item.energy < 300) ||
+            //(item.structureType == STRUCTURE_TOWER && item.energy < 1000) ||
             (item.structureType == STRUCTURE_CONTAINER && _.sum(item.store) < 2000) ||
             (item.structureType == STRUCTURE_STORAGE && _.sum(item.store) < 1000000)
         ) {
@@ -75,9 +80,7 @@ module.exports = {
         }
       }
     }
-console.log('dave', JSON.stringify(finalSites))
     let sortedSites = _.sortByOrder(finalSites, ['priority',  'distance'], ['asc',  'asc'])
-    //console.log(JSON.stringify(sortedSites))
     return (sortedSites.length > 0) ? sortedSites[0].site : null
 
   }

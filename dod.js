@@ -1,3 +1,4 @@
+const hud = require('./hud')
 module.exports = {
   run: function(room) {
     const targets = Game.rooms[room].find(FIND_HOSTILE_CREEPS)
@@ -15,6 +16,20 @@ module.exports = {
       for(let j of Memory.rooms[room].structures.tower) {
         let result = Game.getObjectById(j).attack(Game.getObjectById(sortedHostiles[0].id))
       }
+    } else {
+      if(Game.time % 2 == 0) {
+        for(let j of Memory.rooms[room].structures.tower) {
+          let tower = Game.getObjectById(j)
+          let targetRepair = Game.getObjectById(hud.findRepair(_.sample(Game.creeps)))
+          let result = tower.repair(targetRepair)
+          console.log(targetRepair.structureType, targetRepair.percent)
+        }
+      }
+    }
+    if(sortedHostiles.length > 3) {
+      this.create({
+        totalParts: [MOVE,ATTACK,MOVE,ATTACK], spawnName: `${room}_Soldier_${Game.time}`, job: 'Soldier'
+      })
     }
   }
 }

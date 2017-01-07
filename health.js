@@ -1,25 +1,37 @@
 
 const DNA = {
   'General':  {
-    baseCost: 200,
-    baseParts: [WORK,WORK,MOVE,CARRY]
+    baseCost: 800,
+    baseParts: [WORK,WORK,WORK,WORK,MOVE,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,CARRY],
+    //baseParts: [WORK,WORK,MOVE,MOVE,CARRY,CARRY],
+    scalar: 1
   },
   'Digger':  {
-    baseCost: 350,
-    baseParts: [WORK,WORK,WORK,MOVE]
+    baseCost: 450,
+    baseParts: [WORK,WORK,WORK,WORK,MOVE],
+    scalar: 1
   },
   'Hauler': {
     baseCost: 150,
-    baseParts: [MOVE,CARRY,CARRY]
+    baseParts: [MOVE,CARRY,CARRY],
+    scalar: 2
   },
   'Worker':  {
-    baseCost: 300,
-    baseParts: [WORK,WORK,MOVE,CARRY]
+    baseCost: 700,
+    baseParts: [WORK,WORK,WORK,WORK,WORK,WORK,MOVE,CARRY,MOVE,CARRY],
+    //baseParts: [WORK,WORK,WORK,WORK,MOVE,CARRY],
+    scalar: 1
   },
   'Soldier': {
     baseCost: 130,
     baseParts: [MOVE,ATTACK]
+  },
+  'Tanker': {
+    baseCost: 200,
+    baseParts: [WORK,MOVE,CARRY],
+    scalar: 1
   }
+
 }
 
 module.exports = {
@@ -33,22 +45,29 @@ module.exports = {
 
         if(currentJobCount < expectedJobCount) {
 
-          let scalar = Math.floor(Game.rooms[room].energyCapacityAvailable/DNA[job].baseCost) - 1
+          let scalar = DNA[job].scalar || Math.floor(Game.rooms[room].energyCapacityAvailable/DNA[job].baseCost)
 
           if(_.sum(rm.currentJobs) <= 2 || scalar < 1) scalar = 1
+
           if(Game.rooms[room].energyAvailable >= scalar * DNA[job].baseCost) {
             const spawnName = `${room}_${job}_${Game.time}`
             let totalParts = []
             for(let i=1; i<=scalar; i++) {
               totalParts = totalParts.concat(DNA[job].baseParts)
             }
-            let result = Game.getObjectById(Memory.rooms[room].structures.spawn[0]).createCreep(totalParts, spawnName, {job})
-
+            this.create({
+              totalParts, spawnName, job, room
+            })
+            break
           }
-          break
+
         }
       }
 
     }
+  },
+  create: function(options) {
+    let result = Game.getObjectById(Memory.rooms[options.room].structures.spawn[0]).createCreep(options.totalParts, options.spawnName, {job: options.job})
+    if(typeof result == 'string') console.log(result)
   }
 }
