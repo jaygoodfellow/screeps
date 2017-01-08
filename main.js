@@ -1,71 +1,27 @@
-const roleBuilder = require('role.Builder')
-const roleFixer = require('role.Fixer')
-const roleHarvester = require('role.Harvester')
-const roleTower = require('role.Tower')
-const roleMover = require('role.Mover')
-const roleClaimer = require('role.Claimer')
-const roleSoldier = require('role.Soldier')
-const roleUpgrader = require('role.Upgrader')
-const actionCreate = require('action.Create')
-const actionHarvest = require('action.Harvest')
-const profiler = require('screeps-profiler')
+'use strict'
+const Room = require('Room')
+const Job = require('Job')
+const HelperFunctions = require('HelperFunctions')
 
-// profiler.enable()
 module.exports.loop = function () {
+  HelperFunctions.initMemory()
 
-  // profiler.wrap(function() {
+  let job = new Job()
+  for(var i in Game.rooms) {
+    const room = new Room(i)
 
-    if(Game.time % 200 == 0){
-      _.each(Memory.creeps, creep => {
-        if(!Game.creeps[creep]) delete Memory.creeps[creep]
-      })
-      _.each(Game.rooms, room => {
-        room.memory.pieces = {}
-        let results = room.lookAtArea(0, 0, 50, 50, true)
-        _.each(results, result=> {
-          let piece = result.type
-          if(piece == 'structure') piece = result.structure.structureType
-          if(typeof room.memory.pieces[piece] === "undefined") room.memory.pieces[piece] = []
-          room.memory.pieces[piece].push([result[result.type].id, result.x, result.y])
-        })
-      })
-    }
-    let workForce = {
-      'W26N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Upgrader2': 0, 'Harvester': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
-      'W27N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Upgrader2': 0, 'Harvester': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
-      'W27N68': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Harvester2': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
-    }
-    let time = 0
-    for(let name in Game.creeps) {
+    let creeps = room.getCreeps()
+    for(let i in creeps) {
+      let creep = creeps[i]
 
-        let creep = Game.creeps[name]
 
-        workForce[creep.memory.room][creep.memory.role]++
-
-        if (creep.memory.role == 'Harvester' || creep.memory.role == 'Harvester2') {
-          roleHarvester.run(creep)
-        } else if (creep.memory.role == 'Builder') {
-          roleBuilder.run(creep)
-        } else if (creep.memory.role == 'Fixer') {
-          roleFixer.run(creep)
-        } else if(creep.memory.role == 'Upgrader' || creep.memory.role == 'Upgrader2') {
-          roleUpgrader.run(creep)
-        } else if (creep.memory.role == 'Mover') {
-          roleMover.run(creep)
-        } else if (creep.memory.role == 'Soldier') {
-          roleSoldier.run(creep)
-        } else if (creep.memory.role == 'Claimer') {
-          roleClaimer.run(creep)
-        }
+      job.perform(creep, room)
 
     }
-    let startCpu = Game.cpu.getUsed()
-    if(Game.time % 10 == 0) actionCreate.run(workForce)
-    _.each(Game.rooms, room => {
-      roleTower.run(room)
-    })
-    var elapsed = Game.cpu.getUsed() - startCpu
-    time += elapsed
+    let result = null
 
-  // })
+  }
+
+  HelperFunctions.garbageCollection()
 }
+
