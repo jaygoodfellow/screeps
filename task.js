@@ -24,7 +24,7 @@ module.exports = {
         let build = hud.findBuild(creep)
         let transfer = hud.findTransfer(creep)
         if(build) _.fill(pool, {target: build, action: 'build'}, 0, 500)
-        if(transfer) _.fill(pool, {target: transfer, action: 'transfer'}, 500, 1000)
+        //if(transfer) _.fill(pool, {target: transfer, action: 'transfer'}, 500, 1000)
         let result = _.sample(_.compact(pool))
         creep.say(result.action)
         room = Game.getObjectById(result.target).room.name
@@ -89,7 +89,7 @@ module.exports = {
         break
     }
 
-    if(creep.memory.job == 'General') possibleSites = ['5836b7328b8b9619519effe7']
+    if(creep.memory.job == 'General') possibleSites = ['5836b7328b8b9619519effe5']
     let struct = Game.getObjectById(structure.target)
 
 

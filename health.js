@@ -1,14 +1,13 @@
 
 const DNA = {
   'General':  {
-    baseCost: 800,
-    baseParts: [WORK,WORK,WORK,WORK,MOVE,MOVE,CARRY,CARRY,MOVE,MOVE,CARRY,CARRY],
-    //baseParts: [WORK,WORK,MOVE,MOVE,CARRY,CARRY],
+    baseCost: 300,
+    baseParts: [WORK,WORK,MOVE,CARRY],
     scalar: 1
   },
   'Digger':  {
-    baseCost: 450,
-    baseParts: [WORK,WORK,WORK,WORK,MOVE],
+    baseCost: 250,
+    baseParts: [WORK,WORK,MOVE],
     scalar: 1
   },
   'Hauler': {
@@ -17,9 +16,8 @@ const DNA = {
     scalar: 2
   },
   'Worker':  {
-    baseCost: 700,
-    baseParts: [WORK,WORK,WORK,WORK,WORK,WORK,MOVE,CARRY,MOVE,CARRY],
-    //baseParts: [WORK,WORK,WORK,WORK,MOVE,CARRY],
+    baseCost: 300,
+    baseParts: [WORK,WORK,MOVE,CARRY],
     scalar: 1
   },
   'Soldier': {

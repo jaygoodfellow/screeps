@@ -7,7 +7,6 @@ module.exports = {
     _.each(Game.creeps, creep => {
       if(_.isEmpty(creep.memory.tasks)) creep.memory.tasks = task.getTask(creep)
 
-
       if(creep.spawning == false) {
         let targetRoom = creep.memory.tasks[0].room
         if(targetRoom == creep.room.name) {
@@ -68,7 +67,7 @@ module.exports = {
         break
       case 'harvest':
         result = creep[action](target)
-        if (_.sum(creep.carry) == creep.carryCapacity) creep.memory.tasks.shift()
+         creep.memory.tasks.shift()
         break
       case 'withdraw':
         result = creep[action](target, RESOURCE_ENERGY)
@@ -89,7 +88,8 @@ module.exports = {
         if (_.sum(creep.carry) == 0) creep.memory.tasks.shift()
         break
     }
-
+    dropped = creep.pos.findInRange( FIND_DROPPED_RESOURCES,2)
+    if(dropped[0]) result = creep.pickup(dropped[0])
     switch (result) {
       case ERR_NOT_IN_RANGE:
         hud.addSite(creep.room, 'road', creep.pos)
