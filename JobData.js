@@ -2,30 +2,7 @@
 const HelperFunctions = require('HelperFunctions')
 const Cache = require('Cache')
 const Mem = require('Memory')
-
-const Data = {
-	'W57S75':
-	{
-		'upgradeController': {
-			steps: [
-				{target: '587143ab78e2a9770c721d7f', action: 'withdraw', type: RESOURCE_ENERGY},
-				{target: '5836b7328b8b9619519effe6', action: 'upgradeController' },
-			]
-		},
-		'transfer': {
-			steps: [
-				{target: '5836b7328b8b9619519effe5', action: 'harvest'},
-				{target: '586d12cd00257e047d1abb03', action: 'transfer', type: RESOURCE_ENERGY }
-			]
-		},
-		'build': {
-			steps: [
-				{target: '5836b7328b8b9619519effe5', action: 'harvest'},
-				{target: null, action: 'build'}
-			]
-		}
-	}
-}
+const Data = require('JobConfig')
 
 function JobData() {
 	this.cache = new Cache()
@@ -39,4 +16,15 @@ JobData.prototype.get = function(creep) {
 	return tasks
 }
 
+JobData.prototype.getWorkerRequirements = function(room) {
+	let results = {}
+	for(let i in this.data[room.name]) {
+		results[i] = this.data[room.name][i].workers
+	}
+
+	return results
+}
+JobData.prototype.getBodyParts = function(room, job) {
+	return (typeof this.data[room.name][job].body != 'undefined') ? this.data[room.name][job].body.parts : [WORK,MOVE,MOVE,CARRY,CARRY]
+}
 module.exports = JobData

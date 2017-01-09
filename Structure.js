@@ -12,11 +12,7 @@ Structure.prototype.new = function(creepType, spawn) {
 }
 
 Structure.prototype.load = function(structure) {
-	let loadedStructure = {}
-
-	HelperFunctions.extend(loadedStructure, structure)
-
-	return loadedStructure
+	return structure
 }
 
 module.exports = Structure;

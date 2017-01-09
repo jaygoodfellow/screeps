@@ -1,12 +1,12 @@
 var HelperFunctions = {}
 HelperFunctions.extend = function(target, source) {
-	//console.log(JSON.stringify(source))
 	for(let i in source) {
 		if(target.hasOwnProperty(i)) {
 			continue
 		}
 		target[i] = source[i]
 	}
+
 }
 
 HelperFunctions.garbageCollection = function() {
