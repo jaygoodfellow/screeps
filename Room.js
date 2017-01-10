@@ -146,6 +146,8 @@ Room.prototype.findExtension = function(creep) {
 
 Room.prototype.population = function() {
 	let spawn = this.getStructures('spawn')[0]
+	if(typeof spawn == 'undefined') return
+
 	let data = new JobData()
 	let req = data.getWorkerRequirements(this.room)
 	let workers = {}
@@ -158,7 +160,7 @@ Room.prototype.population = function() {
 		if(parseInt(req[i]) > 0) {
 			let parts = data.getBodyParts(this.room, i)
 			let result = spawn.createCreep(parts, i+'_'+Game.time, {job: i, jobStage: 0, room: this.room.name})
-			if(typeof result == 'string') console.log('new creep: ', result)
+			if(typeof result == 'string') console.log(`new creep (${spawn.room.name}): ${result}`)
 		}
 	}
 
