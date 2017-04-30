@@ -1,16 +1,14 @@
-const init = require('./init')
-const game = require('./game')
-const config = require('./config.Rooms')
+'use strict'
+const init = require('init')
 
-for(let i in config) {
-  Game.rooms[i].memory.workForce = config[i]
-}
 module.exports.loop = function () {
-  _.each(Game.rooms, room => {
-    if(typeof room.memory.workForce != 'undefined') {
-      init.run(room)
-      game.run(room)
-    }
-  })
+  if(typeof Memory.rooms == 'undefined') Memory.rooms = {}
+  for(let i in Game.rooms) {
+    init.run(i)
+  }
 
+  for(let i in Game.creeps){
+    console.log(i)
+  }
 }
+
