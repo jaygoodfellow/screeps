@@ -10,11 +10,11 @@ const actionCreate = require('action.Create')
 const actionHarvest = require('action.Harvest')
 const profiler = require('screeps-profiler')
 
-// profiler.enable()
+profiler.enable()
 module.exports.loop = function () {
 
-  // profiler.wrap(function() {
-// Game.rooms['W34S93'].visual.circle(10,20).line(0,0,10,20);
+  profiler.wrap(function() {
+
     if(Game.time % 200 == 0){
       _.each(Memory.creeps, creep => {
         if(!Game.creeps[creep]) delete Memory.creeps[creep]
@@ -31,7 +31,7 @@ module.exports.loop = function () {
       })
     }
     let workForce = {
-      'W34S93': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0},
+      'W34S93': {'Melee': 0, 'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Mover': 0, 'Claimer': 0, 'Soldier': 0}
     }
     let time = 0
     for(let name in Game.creeps) {
@@ -44,7 +44,11 @@ module.exports.loop = function () {
         // }
 
 
-        if(Game.time % 5 == 0) creep.say(creep.memory.role[0] + ' - ' + creep.ticksToLive)
+
+        if(!workForce[creep.memory.room]) {
+          console.log('fail', creep.memory.role)
+          creep.memory.room = 'W34S93'
+        }
         workForce[creep.memory.room][creep.memory.role]++
 
         if (creep.memory.role == 'Harvester') {
@@ -57,7 +61,7 @@ module.exports.loop = function () {
           roleUpgrader.run(creep)
         } else if (creep.memory.role == 'Mover') {
           roleMover.run(creep)
-        } else if (creep.memory.role == 'Soldier') {
+        } else if (creep.memory.role == 'Melee') {
           roleSoldier.run(creep)
         } else if (creep.memory.role == 'Claimer') {
           roleClaimer.run(creep)
@@ -65,16 +69,20 @@ module.exports.loop = function () {
 
     }
     let startCpu = Game.cpu.getUsed()
-    if(Game.time % 10 == 0) actionCreate.run(workForce)
+    actionCreate.run(workForce)
     _.each(Game.rooms, room => {
-      const hostiles = room.find(FIND_HOSTILE_CREEPS)
-      if(hostiles.length > 0) {
-        roleTower.run(room, hostiles)
+      const targets = room.find(FIND_HOSTILE_CREEPS)
+
+      if(targets.length > 0) {
+        if(workForce['Melee'] == 0) actionCreate.recruit(room, 'Melee')
+        roleTower.run(room, targets)
       }
 
     })
     var elapsed = Game.cpu.getUsed() - startCpu
     time += elapsed
+    // if(Game.time % 15 == 0) console.log(JSON.stringify(workForce))
 
-  // })
+  })
+
 }

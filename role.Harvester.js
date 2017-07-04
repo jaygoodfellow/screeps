@@ -43,6 +43,18 @@ module.exports = {
               creep.memory.target = null
             }
           }
+
+          if(!creep.memory.target) {
+            creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: function (structure) {
+                    if(structure.structureType == STRUCTURE_TOWER && structure.energy < structure.energyCapacity) {
+                        return true
+                    }
+                    return false
+                }
+            })
+          }
+          
           if(!creep.memory.target) {
             creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
@@ -53,6 +65,19 @@ module.exports = {
                 }
             })
           }
+
+          if(!creep.memory.target) {
+            creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
+                filter: function (structure) {
+                    if(structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity) {
+                        return true
+                    }
+                    return false
+                }
+            })
+          }
+
+
           if(!creep.memory.target) {
             creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
@@ -68,17 +93,6 @@ module.exports = {
           if(!creep.memory.target) {
             creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
-                    if(structure.structureType == STRUCTURE_SPAWN && structure.energy < structure.energyCapacity) {
-                        return true
-                    }
-                    return false
-                }
-            })
-          }
-
-          if(!creep.memory.target) {
-            creep.memory.target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-                filter: function (structure) {
                     if(structure.structureType == STRUCTURE_CONTAINER && _.sum(structure.store) < structure.storeCapacity) {
                         return true
                     }
@@ -87,12 +101,12 @@ module.exports = {
             })
           }
 
-          
-          target = Game.getObjectById(creep.memory.target.id)
-          if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(target, {reusePath: 10})
+          if(creep.memory.target) {
+            target = Game.getObjectById(creep.memory.target.id)
+            if(creep.transfer(target, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                creep.moveTo(target, {reusePath: 10})
+            }
           }
-
         }
         else {
             actionHarvest.run(creep)

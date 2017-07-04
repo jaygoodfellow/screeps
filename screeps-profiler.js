@@ -75,7 +75,7 @@ const functionBlackList = [
 ];
 
 function wrapFunction(name, originalFunction) {
-  return function wrappedFunction() {
+  function wrappedFunction() {
     if (Profiler.isProfiling()) {
       const nameMatchesFilter = name === getFilter();
       const start = Game.cpu.getUsed();
@@ -94,7 +94,12 @@ function wrapFunction(name, originalFunction) {
     }
 
     return originalFunction.apply(this, arguments);
-  };
+  }
+
+  wrappedFunction.toString = () =>
+    `// screeps-profiler wrapped function:\n${originalFunction.toString()}`;
+
+  return wrappedFunction;
 }
 
 function hookUpPrototypes() {
@@ -108,14 +113,46 @@ function profileObjectFunctions(object, label) {
 
   Object.getOwnPropertyNames(objectToWrap).forEach(functionName => {
     const extendedLabel = `${label}.${functionName}`;
-    try {
-      const isFunction = typeof objectToWrap[functionName] === 'function';
-      const notBlackListed = functionBlackList.indexOf(functionName) === -1;
-      if (isFunction && notBlackListed) {
-        const originalFunction = objectToWrap[functionName];
-        objectToWrap[functionName] = profileFunction(originalFunction, extendedLabel);
+
+    const isBlackListed = functionBlackList.indexOf(functionName) !== -1;
+    if (isBlackListed) {
+      return;
+    }
+
+    const descriptor = Object.getOwnPropertyDescriptor(objectToWrap, functionName);
+    if (!descriptor) {
+      return;
+    }
+
+    const hasAccessor = descriptor.get || descriptor.set;
+    if (hasAccessor) {
+      const configurable = descriptor.configurable;
+      if (!configurable) {
+        return;
       }
-    } catch (e) { } /* eslint no-empty:0 */
+
+      const profileDescriptor = {};
+
+      if (descriptor.get) {
+        const extendedLabelGet = `${extendedLabel}:get`;
+        profileDescriptor.get = profileFunction(descriptor.get, extendedLabelGet);
+      }
+
+      if (descriptor.set) {
+        const extendedLabelSet = `${extendedLabel}:set`;
+        profileDescriptor.set = profileFunction(descriptor.set, extendedLabelSet);
+      }
+
+      Object.defineProperty(objectToWrap, functionName, profileDescriptor);
+      return;
+    }
+
+    const isFunction = typeof descriptor.value === 'function';
+    if (!isFunction) {
+      return;
+    }
+    const originalFunction = objectToWrap[functionName];
+    objectToWrap[functionName] = profileFunction(originalFunction, extendedLabel);
   });
 
   return objectToWrap;
@@ -147,7 +184,9 @@ const Profiler = {
       return 'Profiler not active.';
     }
 
-    const elapsedTicks = Game.time - Memory.profiler.enabledTick + 1;
+    const endTick = Math.min(Memory.profiler.disableTick || Game.time, Game.time);
+    const startTick = Memory.profiler.enabledTick + 1;
+    const elapsedTicks = endTick - startTick;
     const header = 'calls\t\ttime\t\tavg\t\tfunction';
     const footer = [
       `Avg: ${(Memory.profiler.totalTime / elapsedTicks).toFixed(2)}`,

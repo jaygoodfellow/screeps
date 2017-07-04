@@ -14,9 +14,9 @@ module.exports = {
             let target = creep.pos.findClosestByRange(FIND_STRUCTURES, {
                 filter: function (structure) {
                     if(
-                      (structure.structureType == STRUCTURE_RAMPART && structure.hits/structure.hitsMax < 0.15) ||
-                      (structure.structureType == STRUCTURE_WALL && structure.hits/structure.hitsMax < 0.001) ||
-                      (structure.structureType == STRUCTURE_CONTAINER && structure.hits/structure.hitsMax < 0.5) ||
+                      (structure.structureType == STRUCTURE_RAMPART && structure.hits/structure.hitsMax < 0.50) ||
+                      (structure.structureType == STRUCTURE_WALL && structure.hits/structure.hitsMax < 0.003) ||
+                      (structure.structureType == STRUCTURE_CONTAINER && structure.hits/structure.hitsMax < 0.75) ||
                       (structure.structureType == STRUCTURE_ROAD && structure.hits/structure.hitsMax < 0.75)
                     ) {
                         return true
@@ -24,6 +24,7 @@ module.exports = {
                     return false
                 }
             })
+            // target = Game.getObjectById('59163f1ef66eda1b18a4ab75')
             if(target) {
                 if(creep.repair(target) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(target, {reusePath: 10})

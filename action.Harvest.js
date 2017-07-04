@@ -1,7 +1,7 @@
 module.exports = {
     run:  function(creep) {
 
-        var dropped = creep.room.find(FIND_DROPPED_ENERGY);
+        var dropped = [] //creep.room.find(FIND_DROPPED_ENERGY);
         if(dropped[0]) {
             if(creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE) {
                 creep.moveTo(dropped[0],{reusePath: 10})
