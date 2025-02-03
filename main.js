@@ -1,39 +1,121 @@
+//NEWBIE LAND
 const roleBuilder = require('role.Builder')
 const roleFixer = require('role.Fixer')
 const roleHarvester = require('role.Harvester')
-const roleTower = require('role.Tower')
+const roleClaimer = require('role.Claimer')
 const roleMover = require('role.Mover')
 const roleUpgrader = require('role.Upgrader')
+const roleExplorer = require('role.Explorer')
+const roleMiner = require('role.Miner')
+const roleHauler = require('role.Hauler')
+const roleSoldier = require('role.Soldier')
 const actionCreate = require('action.Create')
-const actionHarvest = require('action.Harvest')
+const configRooms = require("config.Rooms"); 
+const actionRooms = require("action.Room"); 
 
+const API_TOKEN = `d82d3d13-61b6-4847-b3d7-cf801e493d6b`;
+const API_URL = `https://screeps.com/api/user/code`;
 module.exports.loop = function () {
-  let workForce = {
-    'W27N67': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Mover': 0},
-    'W27N68': {'Fixer': 0, 'Builder': 0, 'Upgrader': 0, 'Harvester': 0, 'Harvester2': 0, 'Mover': 0},
+
+  /* ********************************* */
+  // 1. Check if we need to create a new creep
+  /* ********************************* */
+  let workForce = {}
+
+  for (let room in configRooms) {
+    let roomConfig = configRooms[room]
+    for (let role of roomConfig) {
+      if (!workForce[room]) {
+        workForce[room] = {}
+      }
+      if (!workForce[room][role.name]) {
+        workForce[room][role.name] = 0
+      }
+    }
   }
 
+  /* ********************************* */
+  // 2.Track ticks
+  /* ********************************* */
+  if(!Memory.lastTicks) Memory.lastTicks = []
+  Memory.lastTicks.push(+new Date())
+  Memory.lastTicks = Memory.lastTicks.slice(-250)
+ 
+
+
+  /* ********************************* */
+  // 3. Clean up memory of dead creeps
+  /* ********************************* */
+  if(Game.time % 600 == 0) {
+    let deletedCreeps = 0
+    for (var i in Memory.creeps) {
+      if (!Game.creeps[i]) {
+        delete Memory.creeps[i];
+        deletedCreeps++
+      }
+    }
+    console.log(`Deleted ${deletedCreeps} screeps from memory`)
+  }
+
+  /* ********************************* */
+  // 4. Take care of Room business
+  /* ********************************* */
+  for(let room in configRooms) {
+    actionRooms(room)
+  }
+
+  /* ********************************* */
+  // 5. Take care of Creep business
+  /* ********************************* */
   for(let name in Game.creeps) {
       let creep = Game.creeps[name]
+    
+  
+    if (!workForce[creep.memory.room]) workForce[creep.memory.room] = {}
       workForce[creep.memory.room][creep.memory.role]++
 
-      if(Game.time % 3 == 0) creep.say(`${creep.memory.role[0]}: ${creep.ticksToLive}` )
+      if(Game.time % 10 == 0) {
+        creep.say(`${creep.memory.role[0]}: ${creep.ticksToLive}` )
+      }
 
       if(creep.memory.role == 'Upgrader') {
         roleUpgrader.run(creep)
+      } else if (creep.memory.role == 'Miner') {
+        roleMiner.run(creep)
       } else if (creep.memory.role == 'Builder') {
         roleBuilder.run(creep)
       } else if (creep.memory.role == 'Fixer') {
         roleFixer.run(creep)
-      } else if (creep.memory.role == 'Harvester' || creep.memory.role == 'Harvester2') {
+      } else if (
+        creep.memory.role == 'Harvester' || 
+        creep.memory.role == 'Harvester2' 
+      ) {
         roleHarvester.run(creep)
-      } else if (creep.memory.role == 'Mover') {
+      } else if (
+        creep.memory.role == 'Mover' ||
+        creep.memory.role == 'Mover2' ||
+        creep.memory.role == 'Mover3'
+      ) {
         roleMover.run(creep)
+      } else if (creep.memory.role == 'Claimer') {
+        roleClaimer.run(creep)
+      } else if (creep.memory.role == 'Explorer') {
+        roleExplorer.run(creep)
+      } else if (creep.memory.role == 'Hauler') {
+        roleHauler.run(creep)
+      } else if (
+        creep.memory.role == "Melee" ||
+        creep.memory.role == "Ranged" ||
+        creep.memory.role == "Soldier"
+      ) {
+        roleSoldier.run(creep);
       }
+
   }
 
-  if(Game.time % 10 == 0) actionCreate.run(workForce)
-  _.each(Game.rooms, room => {
-    roleTower.run(room)
-  })
+  if (Game.time % 5 == 0) actionCreate.run(workForce)
+  
+
+
 }
+

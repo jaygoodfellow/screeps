@@ -1,48 +1,58 @@
 module.exports = {
-    run:  function(creep) {
-        var dropped = creep.room.find(FIND_DROPPED_RESOURCES);
-        if(dropped[0] && creep.memory.role != 'Harvester') {
-            if(creep.memory.role == 'Miner') {
-                dropped = creep.pos.findInRange( FIND_DROPPED_RESOURCES,10)
-            } else {
-              if(creep.pickup(dropped[0]) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(dropped[0],{reusePath: 10})
-              }
-            }
-        } else {
-          let source = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-              filter: function (structure) {
-                  if( ((creep.memory.role == 'Upgrader' || creep.memory.role == 'Builder') && structure.structureType == STRUCTURE_STORAGE && structure.store.energy > 0)) {
-                      return true
-                  }
-                  return false
-              }
-          })
+  run: function(creep) {
+    let defaultSource = Game.getObjectById(creep.memory.energySource);
+    const range = creep.pos.getRangeTo(defaultSource);
+    if(creep.memory.pickup) {
+    // const altSource = creep.pos.findInRange(FIND_DROPPED_RESOURCES, 25);
+      
+    // if (altSource.length > 0) {
+    //   if (creep.pickup(altSource[0]) == ERR_NOT_IN_RANGE) {
+    //     creep.moveTo(altSource[0], { reusePath: 10 });
+    //   }
+    //   return;
+    // }  
+  }
 
-          if (!source) source = creep.pos.findClosestByRange(FIND_SOURCES)
-          if(creep.memory.energySource) {
-            let desirableSource = Game.getObjectById(creep.memory.energySource)
-            if(desirableSource) {
-              if(desirableSource.energy == 0) {
-                desirableSource = null
-              } else {
+    let desirableSource = creep.pos.findInRange(FIND_STRUCTURES, range, {
+      filter: function(structure) {
+        if (
+          structure.structureType == STRUCTURE_CONTAINER &&
+          _.sum(structure.store) >= 50
+        )
+          return true;
 
-                source = desirableSource
-              }
-            }
-          }
+        if (
+          structure.structureType == STRUCTURE_STORAGE &&
+          structure.energy >= 500
+        )
+          return true;
 
-
-          if(typeof source.structureType != 'undefined') {
-            if(creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source)
-            }
-          } else {
-            if(creep.harvest(source) == ERR_NOT_IN_RANGE) {
-                creep.moveTo(source)
-            }
-
-          }
-        }
+        return false;
+      }
+    });
+    if(!desirableSource && creep.memory.backupSource) {
+      console.log(`Main source of ${creep.name} is empty, using backup source`);
+      desirableSource = [Game.getObjectById(creep.memory.backupSource)];
     }
+
+    let source = defaultSource;
+    if (!creep.memory.role.startsWith("Harvester") && desirableSource.length) {
+      source = desirableSource[0];
+    }
+    // return
+
+    if(!source) {
+      console.log(`No source for ${creep.name}`);
+      return
+    }
+    if (typeof source.structureType != "undefined") {
+      if (creep.withdraw(source, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(source, { reusePath: 5 });
+      }
+    } else {
+      if (creep.harvest(source) == ERR_NOT_IN_RANGE) {
+        creep.moveTo(source, { reusePath: 5 });
+      }
+    }
+  }
 };
