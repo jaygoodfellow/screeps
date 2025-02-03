@@ -13,8 +13,6 @@ const actionCreate = require('action.Create')
 const configRooms = require("config.Rooms"); 
 const actionRooms = require("action.Room"); 
 
-const API_TOKEN = `d82d3d13-61b6-4847-b3d7-cf801e493d6b`;
-const API_URL = `https://screeps.com/api/user/code`;
 module.exports.loop = function () {
 
   /* ********************************* */
